@@ -1,10 +1,10 @@
-<o-form-fxLayout-manager attr="Order" mode="tab" title="{{ 'ORDER' | oTranslate }}" class="fill-form">
+<o-form-fxLayout-manager attr="Order" mode="tab" title="{{ 'ORDER'}}">
     <div fxFill fxLayout="column" fxLayoutAlign="start">
         <o-table 
             attr="OrderTable" 
             service="Order" 
             entity="Order" 
-            title="{{ 'ORDER' | oTranslate }}"
+            title="{{ 'ORDER'}}"
             keys="Id"
             columns="Id;EmployeeId;ShippedDate;OrderDate;AmountTotal;Ready;CloneFromOrder;OrderDetailCount;Freight;Country;City;RequiredDate;CustomerId;ShipName;ShipVia;ShipAddress;ShipCity;ShipRegion;ShipZip;ShipCountry" 
             header-actions="R;D"

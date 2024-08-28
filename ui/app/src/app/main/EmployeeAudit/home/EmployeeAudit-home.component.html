@@ -1,10 +1,10 @@
-<o-form-fxLayout-manager attr="EmployeeAudit" mode="tab" title="{{ 'EMPLOYEEAUDIT' | oTranslate }}" class="fill-form">
+<o-form-fxLayout-manager attr="EmployeeAudit" mode="tab" title="{{ 'EMPLOYEEAUDIT'}}">
     <div fxFill fxLayout="column" fxLayoutAlign="start">
         <o-table 
             attr="EmployeeAuditTable" 
             service="EmployeeAudit" 
             entity="EmployeeAudit" 
-            title="{{ 'EMPLOYEEAUDIT' | oTranslate }}"
+            title="{{ 'EMPLOYEEAUDIT'}}"
             keys="Id"
             columns="LastName;EmployeeId;Title;Salary;FirstName;CreatedOn;CreatedBy;UpdatedOn;UpdatedBy;Id" 
             header-actions="R;D"
