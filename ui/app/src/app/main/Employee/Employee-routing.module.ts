@@ -1,46 +1,50 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { EmployeeDetailComponent } from './detail/Employee-detail.component';
+import { EmployeeDialogDetailComponent } from './dialog-detail/Employee-dialog-detail.component';
 import { EmployeeHomeComponent } from './home/Employee-home.component';
 import { EmployeeNewComponent } from './new/Employee-new.component';
-import { EmployeeDetailComponent } from './detail/Employee-detail.component';
 
 const routes: Routes = [
-  {path: '', component: EmployeeHomeComponent},
+  { path: '', component: EmployeeHomeComponent },
   { path: 'new', component: EmployeeNewComponent },
-  { path: ':Id', component: EmployeeDetailComponent,
+  {
+    path: ':Id', component: EmployeeDetailComponent,
     data: {
       oPermission: {
         permissionId: 'Employee-detail-permissions'
       }
     }
-  },{
+  }, {
     path: ':EmployeeId/EmployeeAudit', loadChildren: () => import('../EmployeeAudit/EmployeeAudit.module').then(m => m.EmployeeAuditModule),
     data: {
-        oPermission: {
-            permissionId: 'EmployeeAudit-detail-permissions'
-        }
+      oPermission: {
+        permissionId: 'EmployeeAudit-detail-permissions'
+      }
     }
-},{
+  }, {
     path: ':EmployeeId/EmployeeTerritory', loadChildren: () => import('../EmployeeTerritory/EmployeeTerritory.module').then(m => m.EmployeeTerritoryModule),
     data: {
-        oPermission: {
-            permissionId: 'EmployeeTerritory-detail-permissions'
-        }
+      oPermission: {
+        permissionId: 'EmployeeTerritory-detail-permissions'
+      }
     }
-},{
+  }, {
     path: ':EmployeeId/Order', loadChildren: () => import('../Order/Order.module').then(m => m.OrderModule),
     data: {
-        oPermission: {
-            permissionId: 'Order-detail-permissions'
-        }
+      oPermission: {
+        permissionId: 'Order-detail-permissions'
+      }
     }
-}
+  }
 ];
 
 export const EMPLOYEE_MODULE_DECLARATIONS = [
-    EmployeeHomeComponent,
-    EmployeeNewComponent,
-    EmployeeDetailComponent 
+  EmployeeHomeComponent,
+  EmployeeNewComponent,
+  EmployeeDetailComponent,
+  EmployeeDialogDetailComponent
 ];
 
 

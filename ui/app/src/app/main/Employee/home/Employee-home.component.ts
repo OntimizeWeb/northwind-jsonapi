@@ -1,25 +1,31 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { OTableButtonComponent, OTableComponent } from 'ontimize-web-ngx';
-import { OChartModule } from 'ontimize-web-ngx-charts';
-import {OReportModule,OReportStoreService} from 'ontimize-web-ngx-report'
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
+
+import { EmployeeDialogDetailComponent } from '../dialog-detail/Employee-dialog-detail.component';
 
 @Component({
   selector: 'Employee-home',
   templateUrl: './Employee-home.component.html',
   styleUrls: ['./Employee-home.component.scss']
 })
-export class EmployeeHomeComponent implements AfterViewInit {
+export class EmployeeHomeComponent  {
 
-  @ViewChild('table', { static: true }) table: OTableComponent;
+  constructor(
+    protected dialog: MatDialog,
+    protected sanitizer: DomSanitizer,
+    //  private reportStoreService: OReportStoreService
+  ) { }
 
-  @ViewChild('button')
-  protected button: OTableButtonComponent;
-
-  ngAfterViewInit() {
-    //this.button.onClick.subscribe(event => {
-   //   this.reportStoreService.openFillReport("94fa9d2a-e9cc-458a-a680-9bc576e14a38");
-   // });
+  public openDetail(data: any): void {
+    this.dialog.open(EmployeeDialogDetailComponent, {
+      height: '330px',
+      width: '520px',
+      data: data
+    });
   }
 
-  //constructor(private reportStoreService: OReportStoreService) { }
+  public getImageSrc(imgValue: string): any {
+    return imgValue ? this.sanitizer.bypassSecurityTrustUrl(imgValue) : './assets/images/no-image-transparent.png';
+  }
 }
