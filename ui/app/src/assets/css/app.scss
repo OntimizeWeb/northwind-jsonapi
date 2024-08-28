@@ -15,4 +15,6 @@
 //Include dark styles option
 .o-dark {
   @include ontimize-style.ontimize-theme-all-component-color(theme.$dark-theme);
+  @include login.login-theme(theme.$dark-theme);
+  @include main.main-theme(theme.$dark-theme);
 }
