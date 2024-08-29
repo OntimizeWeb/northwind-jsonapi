@@ -110,7 +110,30 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         attributes = resources["resources"][api_clz.__name__]["attributes"]
     
         return gen_report(api_clz, request, _project_dir, payload, attributes)
-        
+    @app.route("/api/export", methods=['POST','OPTIONS'])
+    @cross_origin()
+    @admin_required()
+    def export():
+        if request.method == "OPTIONS":
+            return jsonify(success=True)
+        return gen_export(request)
+    
+    @app.route("/api/dynamicjasper", methods=['POST','OPTIONS'])
+    @cross_origin()
+    @admin_required()
+    def dynamicjasper():
+        if request.method == "OPTIONS":
+            return jsonify(success=True)
+        return _gen_report(request)
+    
+    @app.route("/api/bundle", methods=['POST','OPTIONS'])
+    @cross_origin()
+    @admin_required()
+    def bundle():
+        if request.method == "OPTIONS":
+            return jsonify(success=True)
+        return jsonify({"code":0,"data":{},"message": None})
+    
     # Ontimize apiEndpoint path for all services
     @app.route("/ontimizeweb/services/rest/<path:path>", methods=['GET','POST','PUT','PATCH','DELETE','OPTIONS'])
     @cross_origin()
