@@ -1,8 +1,9 @@
+import { ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { EmployeeDialogDetailComponent } from '../dialog-detail/Employee-dialog-detail.component';
+import { OGridComponent } from 'ontimize-web-ngx';
 
 @Component({
   selector: 'Employee-home',
@@ -11,18 +12,14 @@ import { EmployeeDialogDetailComponent } from '../dialog-detail/Employee-dialog-
 })
 export class EmployeeHomeComponent  {
 
+  @ViewChild('grid') grid: OGridComponent;
   constructor(
     protected dialog: MatDialog,
     protected sanitizer: DomSanitizer,
-    //  private reportStoreService: OReportStoreService
   ) { }
 
-  public openDetail(data: any): void {
-    this.dialog.open(EmployeeDialogDetailComponent, {
-      height: '330px',
-      width: '520px',
-      data: data
-    });
+  public openDetail( data: any): void {
+    this.grid.viewDetail(data);
   }
 
   public getImageSrc(imgValue: string): any {
