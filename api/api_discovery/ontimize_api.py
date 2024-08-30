@@ -349,7 +349,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         request.method = 'GET'
         r = CustomEndpoint(model_class=api_clz, fields=list_of_columns, filter_by=filter, pagesize=pagesize, offset=offset)
         result = r.execute(request=request)
-        return r.transform("OntimizeEE", key, result)
+        return r.transform("JSONAPI", key, result) # JSONAPI or LAC or OntimizeEE ARGS.service_type
     
     def get_rows_by_query(api_clz, filter, orderBy, columns, pagesize, offset):
         #Old Style
