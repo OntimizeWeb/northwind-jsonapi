@@ -31,7 +31,7 @@
     "@angular/service-worker": "^15.2.10",
     "@angular/upgrade": "^15.2.10",
     "ontimize-web-ngx-keycloak": "15.0.0",
-    "ontimize-web-ngx": "15.0.3",
+    "ontimize-web-ngx": "15.1.0-JSONAPI-SNAPSHOT-7",
     "ontimize-web-ngx-charts": "15.0.0",
     "ontimize-web-ngx-filemanager": "15.0.0",
     "ontimize-web-ngx-map": "15.0.0",

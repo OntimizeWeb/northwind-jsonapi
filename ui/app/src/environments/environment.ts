@@ -7,9 +7,9 @@ export const environment = {
   production: false,
   versions: {
     core: '15.2.10',
-    charts: '"15.0.0-beta.1',
+    charts: '15.2.0-JSONAPI-SNAPSHOT-0',
     filemanager: '15.0.0',
     map: '15.0.0',
-    report: '15.0.1'
+    report: '15.1.0-JSONAPI-SNAPSHOT-0'
   }
 }

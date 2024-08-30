@@ -1,9 +1,11 @@
 import { ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-
 import { OGridComponent } from 'ontimize-web-ngx';
+import { EmployeeDialogDetailComponent } from '../dialog-detail/Employee-dialog-detail.component';
+import { EmployeeDetailComponent } from '../detail/Employee-detail.component';
 
 @Component({
   selector: 'Employee-home',
@@ -21,6 +23,7 @@ export class EmployeeHomeComponent  {
   public openDetail( data: any): void {
     this.grid.viewDetail(data);
   }
+
 
   public getImageSrc(imgValue: string): any {
     return imgValue ? this.sanitizer.bypassSecurityTrustUrl(imgValue) : './assets/images/no-image-transparent.png';
