@@ -123,9 +123,14 @@ def parseFilter(clz: any, filter: dict, sqltypes: any):
         else:
             from config.config import Args
             _quote = '`' if Args.backtic_as_quote else '"' 
-            attr = clz._s_jsonapi_attrs[f]._proxy_key if f != "id" else clz.id
-            if f == "id":
+            attr = ""
+            if f in clz._s_jsonapi_attrs and f != "id":
+                attr = clz._s_jsonapi_attrs[f]._proxy_key
+            elif f == "id":
                 attr = f'{_quote}{clz.__tablename__}{_quote}.{_quote}id{_quote}'
+                _quote = ""
+            elif attr == "":
+                attr =  f'{_quote}{clz.__tablename__}{_quote}.{_quote}{f}{_quote}'
                 _quote = ""
             q = '"' if isinstance(value, str) else ""
             sql_where += f'{join} {_quote}{attr}{_quote} = {q}{value}{q}'

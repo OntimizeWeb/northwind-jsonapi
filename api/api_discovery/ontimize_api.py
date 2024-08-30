@@ -154,8 +154,10 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             return jsonify(success=True)
         
         if clz_name == "endsession":
-            from flask import flask, session
-            flask.session.clear()
+            from flask import g
+            sessionid = request.args.get("sessionid")
+            if "access_token" in g and g.access_token == sessionid:
+                g.pop("access_token")
             return jsonify({"code":0,"data":{},"message": None})
         
         if clz_name == "dynamicjasper":
@@ -347,7 +349,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         request.method = 'GET'
         r = CustomEndpoint(model_class=api_clz, fields=list_of_columns, filter_by=filter, pagesize=pagesize, offset=offset)
         result = r.execute(request=request)
-        return r.transform("JSONAPI",key, result)
+        return r.transform("OntimizeEE", key, result)
     
     def get_rows_by_query(api_clz, filter, orderBy, columns, pagesize, offset):
         #Old Style
