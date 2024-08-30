@@ -1,6 +1,5 @@
 import { ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
-import { ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { OGridComponent } from 'ontimize-web-ngx';
