@@ -136,7 +136,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
     
     # Ontimize apiEndpoint path for all services
     @app.route("/ontimizeweb/services/rest/<path:path>", methods=['GET','POST','PUT','PATCH','DELETE','OPTIONS'])
-    @cross_origin()
+    @cross_origin(supports_credentials=True)
     @admin_required()
     def api_search(path):
         s = path.split("/")
@@ -148,6 +148,11 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         #CORS 
         if method == "OPTIONS":
             return jsonify(success=True)
+        
+        if clz_name == "endsession":
+            from flask import flask, session
+            flask.session.clear()
+            return jsonify({"code":0,"data":{},"message": None})
         
         if clz_name == "dynamicjasper":
             return _gen_report(request)
@@ -170,9 +175,13 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         api_attributes = resource["attributes"]
         api_clz = resource["model"]
         
-        payload = json.loads(request.data)
+        payload = '{}' if request.data == b'' else json.loads(request.data)
         expressions, filter, columns, sqltypes, offset, pagesize, orderBy, data = parsePayload(api_clz, payload)
         result = {}
+        if method == 'GET':
+            pagesize = 999 if isSearch else pagesize
+            return get_rows(request, api_clz, filter, orderBy, columns, pagesize, offset)
+        
         if method in ['PUT','PATCH']:
             sql_alchemy_row = session.query(api_clz).filter(text(filter)).one()
             for key in DotDict(data):
@@ -312,7 +321,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         #rows = session.query(models.Account.ACCOUNTTYPEID,func.count(models.Account.AccountID)).group_by(models.Account.ACCOUNTTYPEID).all()
         return data
     
-    def get_rows(request: any, api_clz, filter, order_by, columns, pagesize, offset):
+    def get_rows(request: any, api_clz, filter: str, order_by: str, columns: list, pagesize: int, offset: int):
         # New Style
         key = api_clz.__name__.lower()
         resources = getMetaData(api_clz.__name__)
@@ -334,7 +343,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         request.method = 'GET'
         r = CustomEndpoint(model_class=api_clz, fields=list_of_columns, filter_by=filter, pagesize=pagesize, offset=offset)
         result = r.execute(request=request)
-        return r.transform("IMATIA",key, result)
+        return r.transform("JSONAPI",key, result)
     
     def get_rows_by_query(api_clz, filter, orderBy, columns, pagesize, offset):
         #Old Style

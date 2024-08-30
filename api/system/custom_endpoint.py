@@ -269,7 +269,7 @@ class CustomEndpoint():
             self._pkeyList.append(self.quoteStr(altKey))
         filter_by = filter_by if filter_ is None else f"{filter_by} and {filter_}" if filter_by is not None else filter_
         self._href = f"{request.url_root[:-1]}{request.path}"
-        limit = self.pagesize if self.pagesize > limit else limit
+        limit = self.pagesize if self.pagesize > int(limit) else int(limit)
         print(f"limit: {limit}, offset: {offset}, sort: {order_by},filter_by: {filter_by}, add_filter {filter_}")
         try:
             self._createRows(limit=limit,offset=offset,order_by=order_by,filter_by=filter_by, expressions=expressions) 
@@ -360,19 +360,24 @@ class CustomEndpoint():
                     f"Adding filter_by: {filter_by}")
                     session_qry = session_qry.filter(text(filter_by))
                 
-                if order_by and isinstance(order_by, list) and len(order_by) > 0:
-                    col_name = order_by[0]["columnName"]
-                    for a in self._attributes:
-                        if a['attr'].key == col_name:
-                            col_name = a['attr'].columns[0].name
-                            break
-                    session_qry = session_qry.order_by(text(col_name))
+                if order_by:
+                    if isinstance(order_by, list) and len(order_by) > 0:
+                        col_name = order_by[0]["columnName"]
+                        for a in self._attributes:
+                            if a['attr'].key == col_name:
+                                col_name = a['attr'].columns[0].name
+                                break
+                        session_qry = session_qry.order_by(text(col_name))
+                    else:
+                        if order_by in self._attributes:
+                            session_qry = session_qry.order_by(text(order_by))
                 rows = session_qry.limit(limit).offset(offset).all()
         else:
             resource_logger.debug(
                 f"CreateRows on {model_class_name} using QueryFilter: {queryFilter} order_by: {self.order_by}")
             if self.order_by is not None:
-                session_qry = session_qry.filter(text(queryFilter)).order_by(self.order_by)
+                    if self.order_by in self._attributes:
+                        session_qry = session_qry.filter(text(queryFilter)).order_by(self.order_by)
             elif  self.filter_by is None:
                 session_qry = session_qry.filter(text(queryFilter))
             else:
@@ -768,12 +773,14 @@ class CustomEndpoint():
         """
         rows = []
         for each_row in result:
-            row_as_dict = None
+            row_as_dict = {}
             print(f'type(each_row): {type(each_row)}')
             if isinstance (each_row, sqlalchemy.engine.row.Row):  # sqlalchemy.engine.row
                 row_as_dict = each_row._asdict()
             else:
-                row_as_dict = each_row.to_dict()
+                for a,v, in each_row.__dict__.items(): 
+                    if a != "_sa_instance_state":
+                        row_as_dict[a] = v
             if hasattr(each_row,"id"):
                 with contextlib.suppress(Exception):
                     row_as_dict["id"] = each_row.id
@@ -880,6 +887,19 @@ class CustomEndpoint():
             result = newRes
         result = self.move_checksum(json_result)
         result if isinstance(result,list) else [result]
+        if style == "JSONAPI":
+            data = []
+            for row in result:
+                pkey = row[self.primaryKey] if self.primaryKey in row else row["id"] if "id" in row else row["Id"]
+                data.append({"attributes": row,"type": self._model_class_name, "id": pkey })
+            data = {"data": data,
+                "meta": {
+                    "count": len(result),
+                    "limit": self.pagesize,
+                    "total": len(result)
+                }        
+            }
+            result = data
         if style == "IMATIA":
             recordsNumber = self.totalQueryRecordsNumber #if len(result) == 0 else self.startRecordIndex
             startRecord = self.startRecordIndex
