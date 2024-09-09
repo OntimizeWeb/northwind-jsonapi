@@ -1,21 +1,18 @@
 import { ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import {OReportModule,OReportStoreService} from 'ontimize-web-ngx-report'
 import { OGridComponent } from 'ontimize-web-ngx';
-import { EmployeeDialogDetailComponent } from '../dialog-detail/Employee-dialog-detail.component';
-import { EmployeeDetailComponent } from '../detail/Employee-detail.component';
 
 @Component({
   selector: 'Employee-home',
   templateUrl: './Employee-home.component.html',
   styleUrls: ['./Employee-home.component.scss']
 })
-export class EmployeeHomeComponent  {
+export class EmployeeHomeComponent {
 
   @ViewChild('grid') grid: OGridComponent;
   constructor(
-    protected dialog: MatDialog,
     protected sanitizer: DomSanitizer,
   ) { }
 

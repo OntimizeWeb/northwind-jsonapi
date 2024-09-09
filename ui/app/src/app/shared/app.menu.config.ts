@@ -35,83 +35,83 @@ import { UnionCardComponent } from './Union-card/Union-card.component';
 
 export const MENU_CONFIG: MenuRootItem[] = [
     { id: 'home', name: 'HOME', icon: 'home', route: '/main/home' },
-
+    
     {
-        id: 'data', name: ' Customer Orders', icon: 'remove_red_eye', opened: true,
-        items: [
-
-            { id: 'Customer', name: 'CUSTOMER', icon: 'view_list', route: '/main/Customer' }
-
-            , { id: 'Order', name: 'ORDER', icon: 'view_list', route: '/main/Order' }
-
-            , { id: 'OrderDetail', name: 'ORDERDETAIL', icon: 'view_list', route: '/main/OrderDetail' }
-
-            , { id: 'Product', name: 'PRODUCT', icon: 'view_list', route: '/main/Product' }
-
-            , { id: 'Employee', name: 'EMPLOYEE', icon: 'view_list', route: '/main/Employee' }
-        ]
-    },
-    {
-        id: 'other', name: ' Other Tables', icon: 'remove_red_eye', opened: true,
-        items: [
-            { id: 'Category', name: 'CATEGORY', icon: 'view_list', route: '/main/Category' }
-
-            , { id: 'Department', name: 'DEPARTMENT', icon: 'view_list', route: '/main/Department' }
-
-            , { id: 'EmployeeAudit', name: 'EMPLOYEEAUDIT', icon: 'view_list', route: '/main/EmployeeAudit' }
-
-            , { id: 'EmployeeTerritory', name: 'EMPLOYEETERRITORY', icon: 'view_list', route: '/main/EmployeeTerritory' }
-
-            , { id: 'Location', name: 'LOCATION', icon: 'view_list', route: '/main/Location' }
-
-            , { id: 'Region', name: 'REGION', icon: 'view_list', route: '/main/Region' }
-
-            , { id: 'Shipper', name: 'SHIPPER', icon: 'view_list', route: '/main/Shipper' }
-
-            , { id: 'Supplier', name: 'SUPPLIER', icon: 'view_list', route: '/main/Supplier' }
-
-            , { id: 'Territory', name: 'TERRITORY', icon: 'view_list', route: '/main/Territory' }
-
-            , { id: 'Union', name: 'UNION', icon: 'view_list', route: '/main/Union' }
-        ]
-    }
-    , { id: 'settings', name: 'Settings', icon: 'settings', route: '/main/settings' }
-    , { id: 'about', name: 'About', icon: 'info', route: '/main/about' }
-    , { id: 'logout', name: 'LOGOUT', route: '/login', icon: 'power_settings_new', confirm: 'yes' }
+    id: 'data', name: ' data', icon: 'remove_red_eye', opened: true,
+    items: [
+    
+        { id: 'Category', name: 'CATEGORY', icon: 'view_list', route: '/main/Category' }
+    
+        ,{ id: 'Customer', name: 'CUSTOMER', icon: 'view_list', route: '/main/Customer' }
+    
+        ,{ id: 'CustomerDemographic', name: 'CUSTOMERDEMOGRAPHIC', icon: 'view_list', route: '/main/CustomerDemographic' }
+    
+        ,{ id: 'Department', name: 'DEPARTMENT', icon: 'view_list', route: '/main/Department' }
+    
+        ,{ id: 'Employee', name: 'EMPLOYEE', icon: 'view_list', route: '/main/Employee' }
+    
+        ,{ id: 'EmployeeAudit', name: 'EMPLOYEEAUDIT', icon: 'view_list', route: '/main/EmployeeAudit' }
+    
+        ,{ id: 'EmployeeTerritory', name: 'EMPLOYEETERRITORY', icon: 'view_list', route: '/main/EmployeeTerritory' }
+    
+        ,{ id: 'Location', name: 'LOCATION', icon: 'view_list', route: '/main/Location' }
+    
+        ,{ id: 'Order', name: 'ORDER', icon: 'view_list', route: '/main/Order' }
+    
+        ,{ id: 'OrderDetail', name: 'ORDERDETAIL', icon: 'view_list', route: '/main/OrderDetail' }
+    
+        ,{ id: 'Product', name: 'PRODUCT', icon: 'view_list', route: '/main/Product' }
+    
+        ,{ id: 'Region', name: 'REGION', icon: 'view_list', route: '/main/Region' }
+    
+        ,{ id: 'Shipper', name: 'SHIPPER', icon: 'view_list', route: '/main/Shipper' }
+    
+        ,{ id: 'Supplier', name: 'SUPPLIER', icon: 'view_list', route: '/main/Supplier' }
+    
+        ,{ id: 'Territory', name: 'TERRITORY', icon: 'view_list', route: '/main/Territory' }
+    
+        ,{ id: 'Union', name: 'UNION', icon: 'view_list', route: '/main/Union' }
+    
+    ] 
+},
+    
+    { id: 'settings', name: 'Settings', icon: 'settings', route: '/main/settings'}
+    ,{ id: 'about', name: 'About', icon: 'info', route: '/main/about'}
+    ,{ id: 'logout', name: 'LOGOUT', route: '/login', icon: 'power_settings_new', confirm: 'yes' }
 ];
 
 export const MENU_COMPONENTS = [
 
     CategoryCardComponent
 
-    , CustomerCardComponent
+    ,CustomerCardComponent
 
-    , CustomerDemographicCardComponent
+    ,CustomerDemographicCardComponent
 
-    , DepartmentCardComponent
+    ,DepartmentCardComponent
 
-    , EmployeeCardComponent
+    ,EmployeeCardComponent
 
-    , EmployeeAuditCardComponent
+    ,EmployeeAuditCardComponent
 
-    , EmployeeTerritoryCardComponent
+    ,EmployeeTerritoryCardComponent
 
-    , LocationCardComponent
+    ,LocationCardComponent
 
-    , OrderCardComponent
+    ,OrderCardComponent
 
-    , OrderDetailCardComponent
+    ,OrderDetailCardComponent
 
-    , ProductCardComponent
+    ,ProductCardComponent
 
-    , RegionCardComponent
+    ,RegionCardComponent
 
-    , ShipperCardComponent
+    ,ShipperCardComponent
 
-    , SupplierCardComponent
+    ,SupplierCardComponent
 
-    , TerritoryCardComponent
+    ,TerritoryCardComponent
 
-    , UnionCardComponent
+    ,UnionCardComponent
 
 ];

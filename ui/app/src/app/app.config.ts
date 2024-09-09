@@ -19,11 +19,11 @@ export const CONFIG: Config = {
   title: 'ApiLogicServer seed',
 
   //  Language of the application.
-  locale: 'en',
+  locale: 'es',
 
   // The service type used (Ontimize REST standart, Ontimize REST JEE
   // or custom implementation) in the whole application.
-  serviceType: 'JSONAPI',
+  serviceType: 'OntimizeEE',
 
   // Configuration parameters of application services.
   servicesConfiguration: SERVICE_CONFIG,
@@ -34,6 +34,5 @@ export const CONFIG: Config = {
 
   exportConfiguration: {
     path: '/export'
-  },
-  startSessionPath: '/auth/login'
+  }
 };
