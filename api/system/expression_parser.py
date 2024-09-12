@@ -121,13 +121,18 @@ def parseFilter(clz: any, filter: dict, sqltypes: any):
                 filters = expr.get_filters()
                 join = " OR "
         else:
-            from config.config import Args
-            _quote = '`' if Args.backtic_as_quote else '"' 
-            attr = clz._s_jsonapi_attrs[f]._proxy_key if f != "id" else clz.id
-            if f == "id":
+            from config.config import Config
+            _quote = '`' if Config.BACKTIC_AS_QUOTE else '"' 
+            attr = ""
+            if f in clz._s_jsonapi_attrs and f != "id":
+                attr = clz._s_jsonapi_attrs[f]._proxy_key
+            elif f == "id":
                 attr = f'{_quote}{clz.__tablename__}{_quote}.{_quote}id{_quote}'
                 _quote = ""
-            q = '"' if isinstance(value, str) else ""
+            elif attr == "":
+                attr =  f'{_quote}{clz.__tablename__}{_quote}.{_quote}{f}{_quote}'
+                _quote = ""
+            q = "'" if isinstance(value, str) else ""
             sql_where += f'{join} {_quote}{attr}{_quote} = {q}{value}{q}'
             #name = clz._s_jsonapi_attrs[f] if f !: "id" else clz.id
             filters.append({"join": join,"lop": attr, "op": "eq", "rop": value})
@@ -151,19 +156,14 @@ def _parseFilter(filter: dict, sqltypes: any):
     # {filter":{"@basic_expression":{"lop":"BALANCE","op":"<=","rop":35000}}
     filter_result = ""
     a = ""
-    for f in filter:
-        value = filter[f]
+    for f, value in filter.items():
         q = "'"
-        if f == BASIC_EXPRESSION:
-            # {'lop': 'CustomerId', 'op': 'LIKE', 'rop': '%A%'}}
-            if "lop" in value.keys() and "rop" in value.keys():
+        # {'lop': 'CustomerId', 'op': 'LIKE', 'rop': '%A%'}}
+        if f == BASIC_EXPRESSION and "lop" in value.keys() and "rop" in value.keys():
                 lop = value["lop"]
                 op = value["op"]
                 rop = f"{q}{value['rop']}{q}"
-                filter_result = f'"{lop}" {op} {rop}'
-                return filter_result
-        if sqltypes == None:
-            q = "'"
+                return f'"{lop}" {op} {rop}'
         else:
             q = "'" if isinstance(value, str) else ""
         filter_result += f'{a} "{f}" = {q}{value}{q}'
@@ -296,6 +296,9 @@ def advancedFilter(cls, args) -> any:
                     #{'lop': 'CustomerId', 'op': 'LIKE', 'rop': '%A%'}
                     #TODO - modify this to return expressions (and_ & or_)
                     sqlWhere, filters = parseFilter(cls, val['filter'], None)
+                    return expressions, sqlWhere
+                elif "@basic_expression" in val:
+                    sqlWhere = _parseFilter(val, None)
                     return expressions, sqlWhere
                 else:
                     #{'id': '1', 'name': 'John'}

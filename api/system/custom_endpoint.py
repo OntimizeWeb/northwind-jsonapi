@@ -894,7 +894,9 @@ class CustomEndpoint():
             result = newRes
         result = self.move_checksum(json_result)
         result if isinstance(result,list) else [result]
+        
         if style == "JSONAPI":
+            # Ontimize using the JSONAPI with the API Bridge
             data = []
             for row in result:
                 pkey = row[self.primaryKey] if self.primaryKey in row else None
@@ -909,10 +911,12 @@ class CustomEndpoint():
                 }        
             }
             result = data
-        if style == "IMATIA":
+        elif style == "OntimizeEE":
+            #API Bridge - lets Ontimize work out-of-the-box
             recordsNumber = self.totalQueryRecordsNumber #if len(result) == 0 else self.startRecordIndex
             startRecord = self.startRecordIndex
             result = {"code":0,"totalQueryRecordsNumber": recordsNumber, "startRecordIndex": startRecord, "message":"ApiLogicServer","data": result ,"sqlTypes":{}}
+        #if style == "LAC": default
         return result
     
 

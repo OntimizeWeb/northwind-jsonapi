@@ -18,6 +18,7 @@ import sqlalchemy
 import requests
 from datetime import date
 from config.config import Args
+from config.config import Config
 import os
 from pathlib import Path
 from api.system.expression_parser import parsePayload
@@ -74,7 +75,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
 
     
     def gen_export(request) -> any:
-        payload = json.loads(request.data)
+        payload = json.loads(request.data) if request.data != b'' else {}
         type = payload.get("type") or "csv"
         entity = payload.get("dao") 
         queryParm = payload.get("queryParm") or {}
@@ -114,15 +115,15 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
     @app.route("/api/export/pdf", methods=['POST','OPTIONS'])
     @app.route("/ontimizeweb/services/rest/export/pdf", methods=['POST','OPTIONS'])
     @app.route("/ontimizeweb/services/rest/export/csv", methods=['POST','OPTIONS'])
-    @cross_origin()
     @admin_required()
     def export():
-        print(f"export {type}")
+        print(f"export {request.path}")
+        #if request.method == "OPTIONS":
+        #    return jsonify(success=True)
         return gen_export(request)
     
     @app.route("/api/dynamicjasper", methods=['POST','OPTIONS'])
     @app.route("/ontimizeweb/services/rest/dynamicjasper", methods=['POST','OPTIONS'])
-    @cross_origin()
     @admin_required()
     def dynamicjasper():
         if request.method == "OPTIONS":
@@ -131,7 +132,6 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
     
     @app.route("/api/bundle", methods=['POST','OPTIONS'])
     @app.route("/ontimizeweb/services/rest/bundle", methods=['POST','OPTIONS'])
-    @cross_origin()
     @admin_required()
     def bundle():
         if request.method == "OPTIONS":
@@ -154,8 +154,10 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             return jsonify(success=True)
         
         if clz_name == "endsession":
-            from flask import flask, session
-            flask.session.clear()
+            from flask import g
+            sessionid = request.args.get("sessionid")
+            if "access_token" in g and g.access_token == sessionid:
+                g.pop("access_token")
             return jsonify({"code":0,"data":{},"message": None})
         
         if clz_name == "dynamicjasper":
@@ -347,7 +349,8 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         request.method = 'GET'
         r = CustomEndpoint(model_class=api_clz, fields=list_of_columns, filter_by=filter, pagesize=pagesize, offset=offset)
         result = r.execute(request=request)
-        return r.transform("JSONAPI",key, result)
+        service_type: str = Config.ONTIMIZE_SERVICE_TYPE
+        return r.transform(service_type, key, result) # JSONAPI or LAC or OntimizeEE ARGS.service_type
     
     def get_rows_by_query(api_clz, filter, orderBy, columns, pagesize, offset):
         #Old Style
