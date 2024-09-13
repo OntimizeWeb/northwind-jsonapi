@@ -181,7 +181,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         api_attributes = resource["attributes"]
         api_clz = resource["model"]
         
-        payload = '{}' if request.data == b'' else json.loads(request.data)
+        payload = {} if request.data == b'' else json.loads(request.data)
         expressions, filter, columns, sqltypes, offset, pagesize, orderBy, data = parsePayload(api_clz, payload)
         result = {}
         if method == 'GET':
@@ -189,16 +189,29 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             return get_rows(request, api_clz, filter, orderBy, columns, pagesize, offset)
         
         if method in ['PUT','PATCH']:
-            sql_alchemy_row = session.query(api_clz).filter(text(filter)).one()
-            for key in DotDict(data):
-                setattr(sql_alchemy_row, key , DotDict(data)[key])
+            #JSONAPI changes shape of payload
+            key = payload['data']['id']
+            primary_key = api_clz.__mapper__.primary_key[0].name
+            _type = find_column_type(api_clz, primary_key)
+            q = "'" if _type in ["STRING","VARCHAR","DATE","TIMESTAMP"] else ""
+            _filter = f'"{primary_key}" = {q}{key}{q} '
+            sql_alchemy_row = session.query(api_clz).filter(text(_filter)).one()
+            attributes = DotDict(data['attributes'])
+            for key in attributes:
+                value = attributes[key]
+                column = find_column(api_clz, key)
+                setattr(sql_alchemy_row, column , value)
             session.add(sql_alchemy_row)
             result = sql_alchemy_row
-            #stmt = update(api_clz).where(text(filter)).values(data)
             
         if method == 'DELETE':
-            #stmt = delete(api_clz).where(text(filter))
-            sql_alchemy_row = session.query(api_clz).filter(text(filter)).one()
+            #JSONAPI changes shape of payload
+            key = clz_type
+            primary_key = api_clz.__mapper__.primary_key[0].name
+            _type = find_column_type(api_clz, primary_key)
+            q = "'" if _type in ["STRING","VARCHAR","DATE","TIMESTAMP"] else ""
+            _filter = f'"{primary_key}" = {q}{key}{q} '
+            sql_alchemy_row = session.query(api_clz).filter(text(_filter)).one()
             session.delete(sql_alchemy_row)
             result = sql_alchemy_row
             
@@ -206,11 +219,11 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             if data != None:
                 #this is an insert
                 sql_alchemy_row = api_clz()
-                row = DotDict(data)
-                for attr in api_attributes:
-                    name = attr["name"]
-                    if getattr(row, name) != None:
-                        setattr(sql_alchemy_row, name , row[name])
+                row = DotDict(data['attributes'])
+                for attr, value in row.items():
+                    name = find_column(api_clz, attr)
+                    if name != None:
+                        setattr(sql_alchemy_row, name , value)
                 session.add(sql_alchemy_row)
                 result = sql_alchemy_row
                 #stmt = insert(api_clz).values(data)
@@ -232,6 +245,16 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             
         return jsonify({"code":0,"message":f"{method}:True","data":result,"sqlTypes":None})   #{f"{method}":True})
     
+    def find_column_type(api_clz, column_name):
+        for attr in api_clz.__mapper__.attrs:
+            if attr.key.upper() == column_name.upper():
+                return attr.columns[0].type.__visit_name__.upper()
+        return None
+    def find_column(api_clz, column_name):
+        for attr in api_clz.__mapper__.attrs:
+            if attr.key.upper() == column_name.upper():
+                return attr.columns[0].name
+        return None
     def find_model(clz_name:str) -> any:
         clz_members = getMetaData()
         resources = clz_members.get("resources")
