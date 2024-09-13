@@ -187,7 +187,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         if method == 'GET':
             pagesize = 999 #if isSearch else pagesize
             #if config.OnTimeizeServiceType = "JSONAPI":
-            query = query_from_request(request, clz_name)
+            query = query_from_request(request,api_clz=api_clz, clz_name=clz_name)
             result = requests.get(f"http://{request.host}/api/{clz_name}{query}", headers=request.headers, json = {})   
             if result.status_code == 401:
                 return  jsonify({"code":1,"message":f"{result.json()["msg"]}","data":[],"sqlTypes":None})
@@ -270,7 +270,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
                 return resources[resource]
         return None
     
-    def query_from_request(request, clz_name):
+    def query_from_request(request, api_clz, clz_name):
         query = ""
         include = ""
         comma = ""
@@ -278,8 +278,18 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             if k.startswith("fields"):
                 include = f"{include}{comma}{v}"
                 comma = ","
+            elif k.startswith("filter"):
+                #patch to fix uppercase filter name 
+                name = k.replace("filter[","").replace("]","")
+                if column_name := find_column(api_clz, name):
+                    query = f'{query}&filter[{column_name}]={v}'
+                else:
+                    query = f'{query}&filter[{k}]={v}'
             else:
-                query = f'{query}&{k}={v}'
+                if column_name := find_column(api_clz, k):
+                    query = f'{query}&{column_name}={v}'
+                else:
+                    query = f'{query}&{k}={v}'
         include = f"include[{clz_name}]={include}" if include != "" else ""
         return f"?{include}{query}" if query != "" else ""
     def login(request):
