@@ -186,7 +186,14 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         result = {}
         if method == 'GET':
             pagesize = 999 #if isSearch else pagesize
-            return get_rows(request, api_clz, filter, orderBy, columns, pagesize, offset)
+            #if config.OnTimeizeServiceType = "JSONAPI":
+            query = query_from_request(request, clz_name)
+            result = requests.get(f"http://{request.host}/api/{clz_name}{query}", headers=request.headers, json = {})   
+            if result.status_code == 401:
+                return  jsonify({"code":1,"message":f"{result.json()["msg"]}","data":[],"sqlTypes":None})
+            return result.json()
+        
+            #return get_rows(request, api_clz, filter, orderBy, columns, pagesize, offset)
         
         if method in ['PUT','PATCH']:
             #JSONAPI changes shape of payload
@@ -263,11 +270,22 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
                 return resources[resource]
         return None
     
+    def query_from_request(request, clz_name):
+        query = ""
+        include = ""
+        comma = ""
+        for k,v in request.args.items():
+            if k.startswith("fields"):
+                include = f"{include}{comma}{v}"
+                comma = ","
+            else:
+                query = f'{query}&{k}={v}'
+        include = f"include[{clz_name}]={include}" if include != "" else ""
+        return f"?{include}{query}" if query != "" else ""
     def login(request):
         url = f"http://{request.host}/api/auth/login"
         requests.post(url=url, headers=request.headers, json = {})
         return jsonify({"code":0,"message":"Login Successful","data":{}})
-       
     
     def get_rows_agg(request: any, api_clz, agg_type, filter, columns):
         key = api_clz.__name__
