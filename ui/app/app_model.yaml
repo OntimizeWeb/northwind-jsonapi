@@ -288,7 +288,9 @@ entities:
     detail_template: detail_template.html
     exclude: 'false'
     favorite: LastName
-    home_template: home_template.html
+    grid_items: 'EmployeeType, LastName, FirstName, Address, City, PostalCode, Country, HomePhone'
+    grid_image: PhotoPath
+    home_template: grid_template.html
     info_list: <h1>Show When</h1> Support for <a target="_blank" href="https://apilogicserver.github.io/Docs/Admin-Customization/#show_when">Show
       When</a> means you can define expressions that determine when a field is shown
       or hidden.  On this page... <ul> <li> Click <strong>Suyama</strong> and note
