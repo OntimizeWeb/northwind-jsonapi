@@ -22,7 +22,7 @@ def get_sra_directory(args: Args) -> str:
     1. in the venv (from install or Docker) -- the normal case (small projects, less git)
     2. local to project: ui/safrs-react-admin
     3. in env(APILOGICSERVER_HOME | APILOGICPROJECT_APILOGICSERVER_HOME)
-    
+
     This enables the sra code to be re-used, reducing app size 32MB -> 2.5 MB
     """
     directory = 'ui/safrs-react-admin'  # local project sra typical API Logic Server path (index.yaml)
@@ -61,7 +61,7 @@ def admin_events(flask_app: Flask, args: Args, validation_error: ValidationError
 
     @flask_app.route("/admin/<path:path>")
     def start_custom_app_return_spa(path=None):
-        """ Step 1 - Start Custom App, and return minified safrs-react-admin app (acquired from safrs-react-admin/build) 
+        """ Step 1 - Start Custom App, and return minified safrs-react-admin app (acquired from safrs-react-admin/build)
             Custom url: http://localhost:5656/admin/custom_app
         """
         global did_send_spa
@@ -74,8 +74,8 @@ def admin_events(flask_app: Flask, args: Args, validation_error: ValidationError
 
     @flask_app.route('/')
     def start_default_app():
-        """ Step 1 - Start default Admin App 
-            Default URL: http://localhost:5656/ 
+        """ Step 1 - Start default Admin App
+            Default URL: http://localhost:5656/
         """
         admin_logger.info(f'API Logic Server - Start Default App - redirect /admin-app/index.html')
         return redirect('/admin-app/index.html')  # --> return_spa
@@ -143,20 +143,20 @@ def admin_events(flask_app: Flask, args: Args, validation_error: ValidationError
                         f'    url: {args.keycloak_base_url}\n'
                         f'    realm: {args.keycloak_realm}\n'
                         f'    clientId: {args.keycloak_client_id}\n'
-                    )   
+                    )
                     content = content.replace("'{system-default}'", s)
                 elif "sql" in provider_name:
                     sql_auth_config = f'\n  endpoint: {args.http_scheme}://{args.swagger_host}:{args.swagger_port}/{args.api_prefix[1:]}/auth/login\n'
                     content = content.replace("'{system-default}'", sql_auth_config)
                 else:
-                    sys.exit(f"ERROR[admin_loader]: unknown security type: {Config.SECURITY_PROVIDER}")         
+                    sys.exit(f"ERROR[admin_loader]: unknown security type: {Config.SECURITY_PROVIDER}")
 
             admin_logger.debug(f'loading ui/admin/admin.yaml')
             mem = io.BytesIO(str.encode(content))
             if debug_repoonse := False:  # debug, to verify url/security content
                 mem = io.BytesIO(str.encode(content))
                 mem_array = mem.getvalue().decode('utf-8').split('\n')
-                logging.info(f'admin_yaml() - response: \n{mem_array}')    
+                logging.info(f'admin_yaml() - response: \n{mem_array}')
             return send_file(mem, mimetype='text/yaml')
         else:
             response = send_file("ui/admin/admin.yaml", mimetype='text/yaml')
@@ -193,12 +193,11 @@ def admin_events(flask_app: Flask, args: Args, validation_error: ValidationError
             "Access-Control-Allow-Origin"] = "*"  # <- You can change "*" for a domain for example "http://localhost"
         response.headers["Access-Control-Allow-Credentials"] = "true"
         response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS, PUT, DELETE, PATCH"
-        #response.headers["Access-Control-Allow-Headers"] = \
-        #    "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token,  X-Requested-With, X-Auth-Token, Authorization, Access-Control-Allow-Origin"
+        response.headers["Access-Control-Allow-Headers"] = \
+           "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token,  X-Requested-With, X-Auth-Token, Authorization, Access-Control-Allow-Origin"
                 #"access-control-allow-origin, authorization, content-type
         response.headers["Access-Control-Expose-Headers"] = "X-Auth-Token, Content-disposition, X-Requested-With"
         #response.headers["Content-Type"] = "application/json, text/html"
-        
         # This is a short cut to auto login to Ontimize
         try:
             #from security.system.authentication import access_token
@@ -208,6 +207,6 @@ def admin_events(flask_app: Flask, args: Args, validation_error: ValidationError
         except:
             logging.error('\nadmin_loader - after_request - access_token not set\n')
 
-        
+
         admin_logger.debug(f'cors after_request - response: {str(response)}')
         return response
