@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { OntimizeWebModule } from 'ontimize-web-ngx';
 import { SharedModule } from '../../shared/shared.module';
 import  {ORDER_MODULE_DECLARATIONS, OrderRoutingModule} from  './Order-routing.module';
+import { OChartModule } from 'ontimize-web-ngx-charts';
 
 @NgModule({
 
@@ -10,7 +11,8 @@ import  {ORDER_MODULE_DECLARATIONS, OrderRoutingModule} from  './Order-routing.m
     SharedModule,
     CommonModule,
     OntimizeWebModule,
-    OrderRoutingModule
+    OrderRoutingModule,
+    OChartModule
   ],
   declarations: ORDER_MODULE_DECLARATIONS,
   exports: ORDER_MODULE_DECLARATIONS,
