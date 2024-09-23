@@ -5,33 +5,39 @@ import { CustomerNewComponent } from './new/Customer-new.component';
 import { CustomerDetailComponent } from './detail/Customer-detail.component';
 
 const routes: Routes = [
-  {path: '', component: CustomerHomeComponent},
-  { path: 'new', component: CustomerNewComponent },
-  { path: ':Id', component: CustomerDetailComponent,
-    data: {
-      oPermission: {
-        permissionId: 'Customer-detail-permissions'
-      }
-    }
-  },{
-    path: ':CustomerId/Order', loadChildren: () => import('../Order/Order.module').then(m => m.OrderModule),
-    data: {
-        oPermission: {
-            permissionId: 'Order-detail-permissions'
+  {
+    path: '', component: CustomerHomeComponent,
+    children: [
+      { path: 'new', component: CustomerNewComponent },
+      {
+        path: ':Id', component: CustomerDetailComponent,
+        data: {
+          oPermission: {
+            permissionId: 'Customer-detail-permissions'
+          }
         }
-    }
-}
-];
+      }, {
+        path: ':CustomerId/Order', loadChildren: () => import('../Order/Order.module').then(m => m.OrderModule),
+        data: {
+          oPermission: {
+            permissionId: 'Order-detail-permissions'
+          }
+        }
+      }
 
-export const CUSTOMER_MODULE_DECLARATIONS = [
-    CustomerHomeComponent,
-    CustomerNewComponent,
-    CustomerDetailComponent 
-];
+    ]
+  }
+]
+
+    export const CUSTOMER_MODULE_DECLARATIONS = [
+      CustomerHomeComponent,
+      CustomerNewComponent,
+      CustomerDetailComponent
+    ];
 
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class CustomerRoutingModule { }
+      imports: [RouterModule.forChild(routes)],
+      exports: [RouterModule]
+    })
+  export class CustomerRoutingModule { }
