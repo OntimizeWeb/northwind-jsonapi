@@ -90,8 +90,9 @@
 
     </div>
       <div fxFlex="35" fxFlex.md="100">
+        <h3 content-align="center">Product Quantity</h3>
         <o-chart type="pie"  service="OrderDetail"
-        entity="OrderDetail"  parent-keys="OrderId:Id" x-axis="ProductId" y-axis="Quantity"  [chart-parameters]="chartParameters"></o-chart>
+        entity="OrderDetail"  parent-keys="OrderId:Id" y-axis="ProductId" y-label="Product" x-axis="Quantity" x-label="Quantity" [chart-parameters]="chartParameters"></o-chart>
       </div>
   </o-row>
 
