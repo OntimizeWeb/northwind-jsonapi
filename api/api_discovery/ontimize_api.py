@@ -2,7 +2,7 @@ from functools import wraps
 import logging
 import api.system.api_utils as api_utils
 import contextlib
-import yaml
+import time
 from pathlib import Path
 from flask_cors import cross_origin
 import safrs
@@ -152,7 +152,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         #CORS
         if method == "OPTIONS":
             return jsonify(success=True)
-
+        start_time = time.perf_counter()
         if clz_name == "endsession":
             from flask import g
             sessionid = request.args.get("sessionid")
@@ -185,10 +185,16 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         expressions, filter, columns, sqltypes, offset, pagesize, orderBy, data = parsePayload(api_clz, payload)
         result = {}
         if method == 'GET':
-            pagesize = 999 #if isSearch else pagesize
+            pagesize = 25 #if isSearch else pagesize
             #if config.OnTimeizeServiceType = "JSONAPI":
             query = query_from_request(request,api_clz=api_clz, clz_name=clz_name)
+            if query == "":
+                print("arg items", request.args.items())
+                query = f"?pagesize={pagesize}&offset={offset}"
             result = requests.get(f"http://{request.host}/api/{clz_name}{query}", headers=request.headers, json = {})
+            print(f"query: {query}")
+            end_time = time.perf_counter()
+            print(f"Elapsed time: {end_time - start_time} seconds")
             if result.status_code == 401:
                 return  jsonify({"code":1,"message":f"{result.json()['msg']}","data":[],"sqlTypes":None})
             return result.json()
@@ -292,6 +298,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
                     query = f'{query}&{k}={v}'
         include = f"include[{clz_name}]={include}" if include != "" else ""
         return f"?{include}{query}" if query != "" else ""
+
     def login(request):
         url = f"http://{request.host}/api/auth/login"
         requests.post(url=url, headers=request.headers, json = {})
@@ -380,6 +387,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
 
     def get_rows(request: any, api_clz, filter: str, order_by: str, columns: list, pagesize: int, offset: int):
         # New Style
+        start_time = time.perf_counter()
         key = api_clz.__name__.lower()
         resources = getMetaData(api_clz.__name__)
         attributes = resources["resources"][api_clz.__name__]["attributes"]
@@ -401,6 +409,8 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         r = CustomEndpoint(model_class=api_clz, fields=list_of_columns, filter_by=filter, pagesize=pagesize, offset=offset)
         result = r.execute(request=request)
         service_type: str = Config.ONTIMIZE_SERVICE_TYPE
+        end_time = time.perf_counter()
+        print(f"Elapsed time: {end_time - start_time} seconds")
         return r.transform(service_type, key, result) # JSONAPI or LAC or OntimizeEE ARGS.service_type
 
     def get_rows_by_query(api_clz, filter, orderBy, columns, pagesize, offset):

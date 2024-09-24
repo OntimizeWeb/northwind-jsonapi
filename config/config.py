@@ -101,7 +101,7 @@ class Config:
     if SQLALCHEMY_DATABASE_URI.startswith("mysql") or SQLALCHEMY_DATABASE_URI.startswith("mariadb"):
         BACKTIC_AS_QUOTE = True
         
-    ONTIMIZE_SERVICE_TYPE = "JSONAPI" #  "OntimizeEE" uses the API Bridge / "JSONAPI" / "LAC" | Args.service_type
+    ONTIMIZE_SERVICE_TYPE = "OntimizeEE" #  "OntimizeEE" uses the API Bridge / "JSONAPI" / "LAC" | Args.service_type
         
     app_logger.debug(f'config.py - SQLALCHEMY_DATABASE_URI: {SQLALCHEMY_DATABASE_URI}')
 

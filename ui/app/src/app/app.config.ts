@@ -22,8 +22,8 @@ export const CONFIG: Config = {
   locale: 'en',
 
   // The service type used (Ontimize REST standart, Ontimize REST JEE
-  // or custom implementation) in the whole application.
-  serviceType: 'JSONAPI',
+  // or custom implementation) in the whole application. OntimizeEE or JSONAPI
+  serviceType: 'OntimizeEE',
 
   // Configuration parameters of application services.
   servicesConfiguration: SERVICE_CONFIG,
