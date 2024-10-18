@@ -58,13 +58,13 @@ def is_docker() -> bool:
 
 class Config:
     """
-    
+
     Set default Flask configuration from .env file.
 
     These values are overridden by api_logic_server_run cli args, and APILOGICPROJECT_ env variables.
 
     Code should therefore access these ONLY as described in Args, below.
-    
+
     """
 
     # Project Creation Defaults (overridden from args, env variables)
@@ -75,7 +75,7 @@ class Config:
     CREATED_SWAGGER_HOST = "localhost"
     """ where swagger (and other clients) find the API """
     if CREATED_SWAGGER_HOST == "":
-        CREATED_SWAGGER_HOST = CREATED_FLASK_HOST  # 
+        CREATED_SWAGGER_HOST = CREATED_FLASK_HOST  #
     if is_docker and CREATED_FLASK_HOST == "localhost":
         CREATED_FLASK_HOST = "0.0.0.0"  # enables docker run.sh (where there are no args)
     CREATED_PORT = "5656"
@@ -89,7 +89,7 @@ class Config:
     FLASK_APP = environ.get("FLASK_APP")
     FLASK_ENV = environ.get("FLASK_ENV")
     DEBUG = environ.get("DEBUG")
-            
+
     running_at = Path(__file__)
     project_abs_dir = running_at.parent.absolute()
 
@@ -100,7 +100,11 @@ class Config:
     BACKTIC_AS_QUOTE = False # use backtic as quote for table names for API Bridge
     if SQLALCHEMY_DATABASE_URI.startswith("mysql") or SQLALCHEMY_DATABASE_URI.startswith("mariadb"):
         BACKTIC_AS_QUOTE = True
+
         
+    ONTIMIZE_SERVICE_TYPE = "JSONAPI" # or  "OntimizeEE" uses the API Bridge / "JSONAPI" / "LAC" | Args.service_type
+        
+
     app_logger.debug(f'config.py - SQLALCHEMY_DATABASE_URI: {SQLALCHEMY_DATABASE_URI}')
 
     # as desired, use env variable: export SQLALCHEMY_DATABASE_URI='sqlite:////Users/val/dev/servers/docker_api_logic_project/database/db.sqliteXX'
@@ -177,8 +181,8 @@ class Config:
 
 
 class Args():
-    """ 
-    
+    """
+
     Singleton class - typed accessors for flask_app.config values.
 
     The source of truth is the flask_app.config.
@@ -230,6 +234,7 @@ class Args():
         self.keycloak_base_url = Config.KEYCLOAK_BASE_URL
         self.keycloak_client_id = Config.KEYCLOAK_CLIENT_ID
         self.backtic_as_quote = Config.BACKTIC_AS_QUOTE
+        self.service_type = Config.ONTIMIZE_SERVICE_TYPE
 
         self.verbose = False
         self.create_and_run = False
@@ -238,7 +243,7 @@ class Args():
     @property
     def keycloak_realm(self) -> str:
         return self.flask_app.config["KEYCLOAK_REALM"]
-    
+
     @keycloak_realm.setter
     def keycloak_realm(self, realm):
         self.flask_app.config["KEYCLOAK_REALM"] = realm
@@ -246,33 +251,33 @@ class Args():
     @property
     def keycloak_base(self) -> str:
         return self.flask_app.config["KEYCLOAK_BASE"]
-    
+
     @keycloak_base.setter
     def keycloak_base(self, base):
         self.flask_app.config["KEYCLOAK_BASE"] = base
-        
+
     @property
     def keycloak_base_url(self) -> str:
         return self.flask_app.config["KEYCLOAK_BASE_URL"]
-    
+
     @keycloak_base_url.setter
     def keycloak_base_url(self, base):
         self.flask_app.config["KEYCLOAK_BASE_URL"] = base
-        
+
     @property
     def keycloak_client_id(self) -> str:
         return self.flask_app.config["KEYCLOAK_CLIENT_ID"]
-    
+
     @keycloak_client_id.setter
     def keycloak_client_id(self, base):
         self.flask_app.config["KEYCLOAK_CLIENT_ID"] = base
-        
+
 
     @property
     def port(self) -> str:
         """ port to which flask will be bound """
         return self.flask_app.config["PORT"]  # if "PORT" in self.flask_app.config else self.__port
-    
+
     @port.setter
     def port(self, a):
         self.flask_app.config["PORT"] = a
@@ -282,7 +287,7 @@ class Args():
     def swagger_port(self) -> str:
         """ swagger port (eg, 443 for codespaces) """
         return self.flask_app.config["SWAGGER_PORT"]
-    
+
     @swagger_port.setter
     def swagger_port(self, a):
         self.flask_app.config["SWAGGER_PORT"] = a
@@ -292,7 +297,7 @@ class Args():
     def swagger_host(self) -> str:
         """ ip clients use to access API """
         return self.flask_app.config["SWAGGER_HOST"]
-    
+
     @swagger_host.setter
     def swagger_host(self, a):
         self.flask_app.config["SWAGGER_HOST"] = a
@@ -302,7 +307,7 @@ class Args():
     def flask_host(self) -> str:
         """ ip to which flask will be bound """
         return self.flask_app.config["FLASK_HOST"]
-    
+
     @flask_host.setter
     def flask_host(self, a):
         self.flask_app.config["FLASK_HOST"] = a
@@ -320,7 +325,7 @@ class Args():
                 return_security = True
         return return_security
 
-    
+
     @security_enabled.setter
     def security_enabled(self, a):
         self.flask_app.config["SECURITY_ENABLED"] = a
@@ -331,7 +336,7 @@ class Args():
         """ class for auth provider (unused - see auth_provider) """
         return self.flask_app.config["SECURITY_PROVIDER"]
 
-    
+
     @security_provider.setter
     def security_provider(self, a):
         raise Exception("Sorry, security_provider must be specified in the Config class")
@@ -340,9 +345,9 @@ class Args():
     @property
     def api_logic_server_home(self):
         """ location of ApiLogicServer-src (for admin_loader) """
-        return self.flask_app.config["APILOGICSERVER_HOME"] if 'APILOGICSERVER_HOME' in self.flask_app.config else None 
+        return self.flask_app.config["APILOGICSERVER_HOME"] if 'APILOGICSERVER_HOME' in self.flask_app.config else None
 
-    
+
     @api_logic_server_home.setter
     def api_logic_server_home(self, a):
         self.flask_app.config["APILOGICSERVER_HOME"] = a
@@ -353,7 +358,7 @@ class Args():
         """ values: ignored, optional, required """
         return self.flask_app.config["OPT_LOCKING"]
 
-    
+
     @opt_locking.setter
     def opt_locking(self, a):
         opt_locking_export = self.flask_app.config('OPT_LOCKING')  # type: ignore # type: str
@@ -372,7 +377,7 @@ class Args():
     def api_prefix(self) -> str:
         """ uri node for this project (e.g, /api) """
         return self.flask_app.config["API_PREFIX"]
-    
+
     @api_prefix.setter
     def api_prefix(self, a):
         self.flask_app.config["API_PREFIX"] = a
@@ -381,16 +386,24 @@ class Args():
     def backtic_as_quote(self) -> bool:
         """ use backtic as quote for table names """
         return self.flask_app.config["BACKTIC_AS_QUOTE"]
-    
+
     @backtic_as_quote.setter
     def backtic_as_quote(self, a):
         self.flask_app.config["BACKTIC_AS_QUOTE"] = a
-        
+
+    @property
+    def service_type(self) -> str:
+        """ service type for OntimizeEE """
+        return self.flask_app.config["ONTIMIZE_SERVICE_TYPE"]
+    @service_type.setter
+    def service_type(self, a):
+        self.flask_app.config["ONTIMIZE_SERVICE_TYPE"] = a
+
     @property
     def http_scheme(self) -> str:
         """ http or https """
         return self.flask_app.config["HTTP_SCHEME"]
-    
+
     @http_scheme.setter
     def http_scheme(self, a):
         self.flask_app.config["HTTP_SCHEME"] = a
@@ -400,7 +413,7 @@ class Args():
     def create_and_run(self):
         """ internal use: ApiLogicServer create-and-run """
         return self.flask_app.config["CREATE_AND_RUN"]
-    
+
     @create_and_run.setter
     def create_and_run(self, a):
         self.flask_app.config["CREATE_AND_RUN"] = a
@@ -410,7 +423,7 @@ class Args():
     def verbose(self):
         """ activate key loggers for debug """
         return self.flask_app.config["VERBOSE"]
-    
+
     @verbose.setter
     def verbose(self, a):
         self.flask_app.config["VERBOSE"] = a
@@ -421,7 +434,7 @@ class Args():
         """ in prod env, port might be omitted (e.g., nginx) """
         return self.flask_app.config["CLIENT_URI"] if "CLIENT_URI" in self.flask_app.config \
             else None
-    
+
     @client_uri.setter
     def client_uri(self, a):
         self.flask_app.config["CLIENT_URI"] = a
@@ -438,7 +451,7 @@ class Args():
                     value = json.loads(self.flask_app.config["KAFKA_PRODUCER"])
                 return value
         return None
-    
+
     @kafka_producer.setter
     def kafka_producer(self, a: str):
         self.flask_app.config["KAFKA_PRODUCER"] = a
@@ -450,7 +463,7 @@ class Args():
             if self.flask_app.config["KAFKA_CONSUMER"] is not None:
                 return json.loads(self.flask_app.config["KAFKA_CONSUMER"])
         return None
-    
+
     @kafka_consumer.setter
     def kafka_consumer(self, a: str):
         self.flask_app.config["KAFKA_CONSUMER"] = a
@@ -467,7 +480,7 @@ class Args():
     def get_cli_args(self, args: 'Args', dunder_name: str):
         """
         returns tuple of start args:
-        
+
         (flask_host, swagger_host, port, swagger_port, http_scheme, verbose, create_and_run)
         """
 
@@ -501,7 +514,7 @@ class Args():
                 warnings.warn("argparse help formatter failed, falling back.")
                 return formatter
 
-        if dunder_name != "__main__":  
+        if dunder_name != "__main__":
             app_logger.debug(f"config - get_cli_args: WSGI - no args, using creation default host/port..  sys.argv = {sys.argv}\n")
         else:   # gunicorn-friendly host/port settings ()
             # thanks to https://www.geeksforgeeks.org/command-line-arguments-in-python/#argparse
@@ -516,33 +529,33 @@ class Args():
                     formatter_class=make_wide(argparse.ArgumentDefaultsHelpFormatter))
                 parser.add_argument("--port",
                                     help = f'port (Flask)', default = args.port)
-                parser.add_argument("--flask_host", 
-                                    help = f'ip to which flask will be bound', 
+                parser.add_argument("--flask_host",
+                                    help = f'ip to which flask will be bound',
                                     default = args.flask_host)
-                parser.add_argument("--swagger_host", 
+                parser.add_argument("--swagger_host",
                                     help = f'ip clients use to access API',
                                     default = args.swagger_host)
-                parser.add_argument("--swagger_port", 
+                parser.add_argument("--swagger_port",
                                     help = f'swagger port (eg, 443 for codespaces)',
                                     default = args.port)
-                parser.add_argument("--http_scheme", 
+                parser.add_argument("--http_scheme",
                                     help = f'http or https',
                                     default = "http")
-                parser.add_argument("--verbose", 
+                parser.add_argument("--verbose",
                                     help = f'for more logging',
                                     default = False)
-                parser.add_argument("--create_and_run", 
+                parser.add_argument("--create_and_run",
                                     help = f'system use - log how to open project',
                                     default = False)
-                
+
                 parser.add_argument("flask_host_p", nargs='?', default = args.flask_host)
                 parser.add_argument("port_p", nargs='?', default = args.port)
                 parser.add_argument("swagger_host_p", nargs='?', default = args.swagger_host)
-                
+
                 parse_args = parser.parse_args()
 
                 """
-                    accepting both positional (compatibility) and keyword args... 
+                    accepting both positional (compatibility) and keyword args...
                     cases that matter:
                         no args
                         kw only:        argv[1] starts with -
@@ -574,4 +587,3 @@ class Args():
             args.http_scheme = 'https'
 
         return
-   

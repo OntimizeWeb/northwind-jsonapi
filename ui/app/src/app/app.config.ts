@@ -22,7 +22,7 @@ export const CONFIG: Config = {
   locale: 'en',
 
   // The service type used (Ontimize REST standart, Ontimize REST JEE
-  // or custom implementation) in the whole application.
+  // or custom implementation) in the whole application. OntimizeEE or JSONAPI
   serviceType: 'JSONAPI',
 
   // Configuration parameters of application services.
@@ -34,5 +34,6 @@ export const CONFIG: Config = {
 
   exportConfiguration: {
     path: '/export'
-  }
+  },
+  startSessionPath: '/auth/login'
 };

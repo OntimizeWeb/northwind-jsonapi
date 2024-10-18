@@ -69,14 +69,36 @@ def parsePayload(clz, payload: str):
     :orderBy string 
     :data JSON 
     """
-    sqltypes = payload.get("sqltypes") or None
-    expressions, sqlWhere = advancedFilter(clz, payload)
-    _filter, filter = parseFilter(clz, payload.get("filter", {}), sqltypes)
-    columns: list = payload.get("columns") or []
-    offset: int = payload.get("offset") or 0
-    pagesize: int = payload.get("pageSize") or 100
-    orderBy: list = payload.get("orderBy") or []
-    data = fixup_data(payload.get("data", None), sqltypes)
+    columns = []
+    pagesize = 20
+    offset = 0
+    orderBy = None
+    _filter = None
+    data = None
+    filters = {}
+    sqltypes = None
+    if len(request.args) > 0:
+        for arg, value in request.args.items():
+            if arg.startswith("fields"):
+                columns.append(value)
+            elif arg == 'page[limit]':
+                pagesize = int(value) if value else 999
+            elif arg == 'page[offset]':
+                offset = int(value)
+            elif arg == 'sort':
+                orderBy = value
+            elif arg.startswith("filter"):
+                filters[arg] = value
+        expressions, _filter = advancedFilter(clz, request.args)
+    else:
+        sqltypes = payload.get("sqltypes") or None
+        expressions, sqlWhere = advancedFilter(clz, payload)
+        _filter, filter = parseFilter(clz, payload.get("filter", {}), sqltypes)
+        columns: list = payload.get("columns") or []
+        offset: int = payload.get("offset") or 0
+        pagesize: int = payload.get("pageSize") or 100
+        orderBy: list = fixup_sort(clz, payload.get("orderBy", None)) or []
+        data = fixup_data(payload.get("data", None), sqltypes)
 
     return expressions, _filter, columns, sqltypes, offset, pagesize, orderBy, data
 
@@ -99,13 +121,18 @@ def parseFilter(clz: any, filter: dict, sqltypes: any):
                 filters = expr.get_filters()
                 join = " OR "
         else:
-            from config.config import Args
-            _quote = '`' if Args.backtic_as_quote else '"' 
-            attr = clz._s_jsonapi_attrs[f]._proxy_key if f != "id" else clz.id
-            if f == "id":
+            from config.config import Config
+            _quote = '`' if Config.BACKTIC_AS_QUOTE else '"' 
+            attr = ""
+            if f in clz._s_jsonapi_attrs and f != "id":
+                attr = clz._s_jsonapi_attrs[f]._proxy_key
+            elif f == "id":
                 attr = f'{_quote}{clz.__tablename__}{_quote}.{_quote}id{_quote}'
                 _quote = ""
-            q = '"' if isinstance(value, str) else ""
+            elif attr == "":
+                attr =  f'{_quote}{clz.__tablename__}{_quote}.{_quote}{f}{_quote}'
+                _quote = ""
+            q = "'" if isinstance(value, str) else ""
             sql_where += f'{join} {_quote}{attr}{_quote} = {q}{value}{q}'
             #name = clz._s_jsonapi_attrs[f] if f !: "id" else clz.id
             filters.append({"join": join,"lop": attr, "op": "eq", "rop": value})
@@ -113,35 +140,43 @@ def parseFilter(clz: any, filter: dict, sqltypes: any):
             
     return sql_where, filters
 
+def fixup_sort(clz, data):
+    sort = None
+    if data:
+        for d in data:
+            sort = []
+            column_name = d["columnName"]
+            for attr_name, value in clz._s_jsonapi_attrs.items():
+                if column_name.upper() == attr_name.upper():
+                    sort.append({"columnName":attr_name, "ascendent": d["ascendent"]})
+                    continue
+    return sort
 def fixup_data(data, sqltypes):
     if data:
         for key, value in data.items():
             if sqltypes and key in sqltypes and isinstance(value, str):
                 if sqltypes[key] in [-5,2,4,5,-6]: #BIGINT, TINYINT, INT, SMALLINT, INTEGER
                     data[key] = int(value)
+                elif  sqltypes[key] in [6]: #DECIMAL
+                    data[key] = Decimal(value)
             if sqltypes and key in sqltypes and sqltypes[key] in [91,93] and isinstance(value, int): #DATE, TIMESTAMP 
                 from datetime import datetime  
                 fmt = "%Y-%m-%d" if sqltypes[key] == 91 else "%Y-%m-%d %H:%M:%S"
-                data[key] = datetime.fromtimestamp(value / 1000).strftime(fmt)  
+                data[key] = datetime.fromtimestamp(value / 1000) #.strftime(fmt)  
     return data
 
 def _parseFilter(filter: dict, sqltypes: any):
     # {filter":{"@basic_expression":{"lop":"BALANCE","op":"<=","rop":35000}}
     filter_result = ""
     a = ""
-    for f in filter:
-        value = filter[f]
+    for f, value in filter.items():
         q = "'"
-        if f == BASIC_EXPRESSION:
-            # {'lop': 'CustomerId', 'op': 'LIKE', 'rop': '%A%'}}
-            if "lop" in value.keys() and "rop" in value.keys():
+        # {'lop': 'CustomerId', 'op': 'LIKE', 'rop': '%A%'}}
+        if f == BASIC_EXPRESSION and "lop" in value.keys() and "rop" in value.keys():
                 lop = value["lop"]
                 op = value["op"]
                 rop = f"{q}{value['rop']}{q}"
-                filter_result = f'"{lop}" {op} {rop}'
-                return filter_result
-        if sqltypes == None:
-            q = "'"
+                return f'"{lop}" {op} {rop}'
         else:
             q = "'" if isinstance(value, str) else ""
         filter_result += f'{a} "{f}" = {q}{value}{q}'
@@ -227,7 +262,11 @@ class BasicExpression:
 
     def is_numeric(self, value):
         return False if value and isinstance(value, str) else True 
-
+def convert_attrname(attrname, attrs):
+    return next(
+        (a[0] for a in attrs.items() if a[0].upper() == attrname.upper()),
+        attrname,
+    )
 def advancedFilter(cls, args) -> any:
     filters = []
     expressions = []
@@ -265,12 +304,20 @@ def advancedFilter(cls, args) -> any:
         else:
             if isinstance(val, dict):
                 #if FILTER_EXPRESSION in item or BASIC_EXPRESSION in item:
+                #filter[filter[@basic_expression]]=
                 if "filter" in val:
                     # Ontimize Advanced Filter
                     #{'lop': 'CustomerId', 'op': 'LIKE', 'rop': '%A%'}
                     #TODO - modify this to return expressions (and_ & or_)
                     sqlWhere, filters = parseFilter(cls, val['filter'], None)
                     return expressions, sqlWhere
+                elif "@basic_expression" in val:
+                    sqlWhere = _parseFilter(val, None)
+                    return expressions, sqlWhere
+                elif req_arg == 'filter[@basic_expression]' or req_arg == 'filter[@BASIC_EXPRESSION]':
+                        filters.append({"lop": val['lop'], "op": val["op"], "rop": val["rop"]})
+                elif "rop" in val:
+                    filters.append(val)
                 else:
                     #{'id': '1', 'name': 'John'}
                     for f, value in val.items():
@@ -312,16 +359,19 @@ def advancedFilter(cls, args) -> any:
     join =  ""
     expression_holder= []
     for flt in filters:
-        attr_name = flt.get("lop")
+        attr_name = convert_attrname(flt.get("lop"), cls._s_jsonapi_attrs)
         attr_val = flt.get("rop")
-        if attr_name != "id" and attr_name not in cls._s_jsonapi_attrs:
+        if attr_name not in ["id","ID","Id"] and attr_name not in cls._s_jsonapi_attrs:
             raise ValidationError(f'Invalid filter "{flt}", unknown attribute "{attr_name}"')
-
+        if attr_name in ["id","ID","Id"]:
+            for a in cls._s_jsonapi_attrs.items(): 
+                if "primary_key=True" in str(a): 
+                    attr_name = a[0]
         op_name = flt.get("op", "").strip().upper()
-        if not op_name in ONTIMIZE_OPERATORS:
+        if op_name not in ONTIMIZE_OPERATORS:
             raise ValidationError(f'Invalid filter {flt}, unknown operator: {op_name}')
         #join = flt.get("join", "").strip("_").lower()   
-        attr = cls._s_jsonapi_attrs[attr_name] if attr_name != "id" else cls.id if "id" in cls._s_jsonapi_attrs else cls.Id
+        attr = cls._s_jsonapi_attrs[attr_name] if attr_name != "id" else cls.id 
         if op_name in ["IN"]:
             expr = ExpressionHolder(expr=attr.in_(clean(attr_val)), join=join)
             expression_holder.append(expr)
@@ -329,6 +379,7 @@ def advancedFilter(cls, args) -> any:
             expressions.append(attr.ilike( clean(attr_val) ))
             expr = ExpressionHolder(expr=attr.ilike(clean(attr_val)), join=join)
             expression_holder.append(expr)
+            sqlWhere += f'{join} "{attr_name}" LIKE {clean(attr_val)}'
         elif op_name in ["NOTLIKE","NOTIN"]:
             expr = ExpressionHolder(expr=attr.not_in_(clean(attr_val)), join=join)
             expression_holder.append(expr)

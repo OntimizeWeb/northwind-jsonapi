@@ -2,7 +2,7 @@ from functools import wraps
 import logging
 import api.system.api_utils as api_utils
 import contextlib
-import yaml
+import time
 from pathlib import Path
 from flask_cors import cross_origin
 import safrs
@@ -18,6 +18,7 @@ import sqlalchemy
 import requests
 from datetime import date
 from config.config import Args
+from config.config import Config
 import os
 from pathlib import Path
 from api.system.expression_parser import parsePayload
@@ -33,8 +34,8 @@ from api.system.gen_pdf_report import export_pdf
 
 app_logger = logging.getLogger(__name__)
 
-db = safrs.DB 
-session = db.session 
+db = safrs.DB
+session = db.session
 _project_dir = None
 class DotDict(dict):
     """ dot.notation access to dictionary attributes """
@@ -46,18 +47,18 @@ class DotDict(dict):
 
 def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_decorators = []):
     pass
-    
+
 #def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
     # sourcery skip: avoid-builtin-shadow
-    """ Ontimize API - new end points for services 
-    
+    """ Ontimize API - new end points for services
+
         Brief background: see readme_customize_api.md
-    
+
     """
     _project_dir = project_dir
-    app_logger.debug("api/api_discovery/ontimize_api.py - services for ontimize") 
+    app_logger.debug("api/api_discovery/ontimize_api.py - services for ontimize")
 
-    
+
     def admin_required():
         """
         Support option to bypass security (see cats, below).
@@ -72,11 +73,11 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             return decorator
         return wrapper
 
-    
+
     def gen_export(request) -> any:
-        payload = json.loads(request.data)
+        payload = json.loads(request.data) if request.data != b'' else {}
         type = payload.get("type") or "csv"
-        entity = payload.get("dao") 
+        entity = payload.get("dao")
         queryParm = payload.get("queryParm") or {}
         columns = payload.get("columns") or []
         columnTitles = payload.get("columnTitles") or []
@@ -87,33 +88,59 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         resources = getMetaData(api_clz.__name__)
         attributes = resources["resources"][api_clz.__name__]["attributes"]
         if type in ["csv",'CSV']:
-            return csv_gen_report(api_clz, request, entity, queryParm, columns, columnTitles, attributes) 
-        elif type == "pdf": 
+            return csv_gen_report(api_clz, request, entity, queryParm, columns, columnTitles, attributes)
+        elif type == "pdf":
             payload["entity"] = entity
-            return export_pdf(api_clz, request, entity, queryParm, columns, columnTitles, attributes) 
+            return export_pdf(api_clz, request, entity, queryParm, columns, columnTitles, attributes)
         #elif type == "xlsx":
         #    return xlsx_gen_report(api_clz, request, entity, queryParm, columns, columnTitles, attributes)
-        
-        return jsonify({"code":1,"message":f"Unknown export type {type}","data":None,"sqlTypes":None})   
-    
-    
+
+        return jsonify({"code":1,"message":f"Unknown export type {type}","data":None,"sqlTypes":None})
+
+
     def _gen_report(request) -> any:
         payload = json.loads(request.data)
 
         if len(payload) == 3:
             return jsonify({})
-        
+
         entity = payload["entity"]
         resource = find_model(entity)
         api_clz = resource["model"]
         resources = getMetaData(api_clz.__name__)
         attributes = resources["resources"][api_clz.__name__]["attributes"]
-    
+
         return gen_report(api_clz, request, _project_dir, payload, attributes)
-        
+    @app.route("/api/export/csv", methods=['POST','OPTIONS'])
+    @app.route("/api/export/pdf", methods=['POST','OPTIONS'])
+    @app.route("/ontimizeweb/services/rest/export/pdf", methods=['POST','OPTIONS'])
+    @app.route("/ontimizeweb/services/rest/export/csv", methods=['POST','OPTIONS'])
+    @admin_required()
+    def export():
+        print(f"export {request.path}")
+        #if request.method == "OPTIONS":
+        #    return jsonify(success=True)
+        return gen_export(request)
+
+    @app.route("/api/dynamicjasper", methods=['POST','OPTIONS'])
+    @app.route("/ontimizeweb/services/rest/dynamicjasper", methods=['POST','OPTIONS'])
+    @admin_required()
+    def dynamicjasper():
+        if request.method == "OPTIONS":
+            return jsonify(success=True)
+        return _gen_report(request)
+
+    @app.route("/api/bundle", methods=['POST','OPTIONS'])
+    @app.route("/ontimizeweb/services/rest/bundle", methods=['POST','OPTIONS'])
+    @admin_required()
+    def bundle():
+        if request.method == "OPTIONS":
+            return jsonify(success=True)
+        return jsonify({"code":0,"data":{},"message": None})
+
     # Ontimize apiEndpoint path for all services
     @app.route("/ontimizeweb/services/rest/<path:path>", methods=['GET','POST','PUT','PATCH','DELETE','OPTIONS'])
-    @cross_origin()
+    @cross_origin(supports_credentials=True)
     @admin_required()
     def api_search(path):
         s = path.split("/")
@@ -122,22 +149,29 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         isSearch = s[len(s) -1] == "search"
         method = request.method
         rows = []
-        #CORS 
+        #CORS
         if method == "OPTIONS":
             return jsonify(success=True)
-        
+        start_time = time.perf_counter()
+        if clz_name == "endsession":
+            from flask import g
+            sessionid = request.args.get("sessionid")
+            if "access_token" in g and g.access_token == sessionid:
+                g.pop("access_token")
+            return jsonify({"code":0,"data":{},"message": None})
+
         if clz_name == "dynamicjasper":
             return _gen_report(request)
-        
+
         if clz_name in ["listReports", "bundle", "reportstore"]:
             return jsonify({"code":0,"data":{},"message": None})
-        
+
         if clz_name == "export":
             return gen_export(request)
-        
+
         if request.path == '/ontimizeweb/services/rest/users/login':
             return login(request)
-        
+
         #api_clz = api_map.get(clz_name)
         resource = find_model(clz_name)
         if resource == None:
@@ -146,54 +180,94 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             )
         api_attributes = resource["attributes"]
         api_clz = resource["model"]
-        
-        payload = json.loads(request.data)
+
+        payload = {} if request.data == b'' else json.loads(request.data)
         expressions, filter, columns, sqltypes, offset, pagesize, orderBy, data = parsePayload(api_clz, payload)
         result = {}
+        if method == 'GET':
+            pagesize = 25 #if isSearch else pagesize
+            #if config.OnTimeizeServiceType = "JSONAPI":
+            query = query_from_request(request,api_clz=api_clz, clz_name=clz_name)
+            if query == "":
+                print("arg items", request.args.items())
+                query = f"?pagesize={pagesize}&offset={offset}"
+            result = requests.get(f"http://{request.host}/api/{clz_name}{query}", headers=request.headers, json = {})
+            print(f"query: {query}")
+            end_time = time.perf_counter()
+            print(f"Elapsed time: {end_time - start_time} seconds")
+            if result.status_code == 401:
+                return  jsonify({"code":1,"message":f"{result.json()['msg']}","data":[],"sqlTypes":None})
+            return result.json()
+
+            #return get_rows(request, api_clz, filter, orderBy, columns, pagesize, offset)
+
         if method in ['PUT','PATCH']:
-            sql_alchemy_row = session.query(api_clz).filter(text(filter)).one()
-            for key in DotDict(data):
-                setattr(sql_alchemy_row, key , DotDict(data)[key])
+            #JSONAPI changes shape of payload
+            key = payload['data']['id']
+            primary_key = api_clz.__mapper__.primary_key[0].name
+            _type = find_column_type(api_clz, primary_key)
+            q = "'" if _type in ["STRING","VARCHAR","DATE","TIMESTAMP"] else ""
+            _filter = f'"{primary_key}" = {q}{key}{q} '
+            sql_alchemy_row = session.query(api_clz).filter(text(_filter)).one()
+            attributes = DotDict(data['attributes'])
+            for key in attributes:
+                value = attributes[key]
+                column = find_column(api_clz, key)
+                setattr(sql_alchemy_row, column , value)
             session.add(sql_alchemy_row)
             result = sql_alchemy_row
-            #stmt = update(api_clz).where(text(filter)).values(data)
-            
+
         if method == 'DELETE':
-            #stmt = delete(api_clz).where(text(filter))
-            sql_alchemy_row = session.query(api_clz).filter(text(filter)).one()
+            #JSONAPI changes shape of payload
+            key = clz_type
+            primary_key = api_clz.__mapper__.primary_key[0].name
+            _type = find_column_type(api_clz, primary_key)
+            q = "'" if _type in ["STRING","VARCHAR","DATE","TIMESTAMP"] else ""
+            _filter = f'"{primary_key}" = {q}{key}{q} '
+            sql_alchemy_row = session.query(api_clz).filter(text(_filter)).one()
             session.delete(sql_alchemy_row)
             result = sql_alchemy_row
-            
+
         if method == 'POST':
             if data != None:
                 #this is an insert
                 sql_alchemy_row = api_clz()
-                row = DotDict(data)
-                for attr in api_attributes:
-                    name = attr["name"]
-                    if getattr(row, name) != None:
-                        setattr(sql_alchemy_row, name , row[name])
+                row = DotDict(data['attributes'])
+                for attr, value in row.items():
+                    name = find_column(api_clz, attr)
+                    if name != None:
+                        setattr(sql_alchemy_row, name , value)
                 session.add(sql_alchemy_row)
                 result = sql_alchemy_row
                 #stmt = insert(api_clz).values(data)
-                
+
             else:
                 #GET (sent as POST)
                 #rows = get_rows_by_query(api_clz, filter, orderBy, columns, pagesize, offset)
                 if "TypeAggregate" in clz_type:
                     return get_rows_agg(request, api_clz, clz_type, filter, columns)
                 else:
-                    pagesize = 999 if isSearch else pagesize
+                    pagesize = 999 # if isSearch else pagesize
                     return get_rows(request, api_clz, None, orderBy, columns, pagesize, offset)
-        try:        
+        try:
             session.commit()
             session.flush()
         except Exception as ex:
             session.rollback()
-            return jsonify({"code":1,"message":f"{ex}","data":[],"sqlTypes":None}) 
-            
+            return jsonify({"code":1,"message":f"{ex}","data":[],"sqlTypes":None})
+
         return jsonify({"code":0,"message":f"{method}:True","data":result,"sqlTypes":None})   #{f"{method}":True})
-    
+
+    def find_column_type(api_clz, column_name):
+        for attr in api_clz.__mapper__.attrs:
+            if attr.key.upper() == column_name.upper():
+                return attr.columns[0].type.__visit_name__.upper()
+        return None
+    def find_column(api_clz, column_name):
+        for attr in api_clz.__mapper__.attrs:
+            if attr.key.upper() == column_name.upper():
+                return attr.columns[0].name
+        return None
     def find_model(clz_name:str) -> any:
         clz_members = getMetaData()
         resources = clz_members.get("resources")
@@ -201,13 +275,35 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             if resource == clz_name:
                 return resources[resource]
         return None
-    
+
+    def query_from_request(request, api_clz, clz_name):
+        query = ""
+        include = ""
+        comma = ""
+        for k,v in request.args.items():
+            if k.startswith("fields"):
+                include = f"{include}{comma}{v}"
+                comma = ","
+            elif k.startswith("filter"):
+                #patch to fix uppercase filter name
+                name = k.replace("filter[","").replace("]","")
+                if column_name := find_column(api_clz, name):
+                    query = f'{query}&filter[{column_name}]={v}'
+                else:
+                    query = f'{query}&filter[{k}]={v}'
+            else:
+                if column_name := find_column(api_clz, k):
+                    query = f'{query}&{column_name}={v}'
+                else:
+                    query = f'{query}&{k}={v}'
+        include = f"include[{clz_name}]={include}" if include != "" else ""
+        return f"?{include}{query}" if query != "" else ""
+
     def login(request):
         url = f"http://{request.host}/api/auth/login"
         requests.post(url=url, headers=request.headers, json = {})
         return jsonify({"code":0,"message":"Login Successful","data":{}})
-       
-    
+
     def get_rows_agg(request: any, api_clz, agg_type, filter, columns):
         key = api_clz.__name__
         resources = getMetaData(key)
@@ -288,16 +384,17 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         #rows = session.query(text(sql)).all()
         #rows = session.query(models.Account.ACCOUNTTYPEID,func.count(models.Account.AccountID)).group_by(models.Account.ACCOUNTTYPEID).all()
         return data
-    
-    def get_rows(request: any, api_clz, filter, order_by, columns, pagesize, offset):
+
+    def get_rows(request: any, api_clz, filter: str, order_by: str, columns: list, pagesize: int, offset: int):
         # New Style
+        start_time = time.perf_counter()
         key = api_clz.__name__.lower()
         resources = getMetaData(api_clz.__name__)
         attributes = resources["resources"][api_clz.__name__]["attributes"]
         list_of_columns = []
         for a in attributes:
             name = a["name"]
-            col = a["attr"].columns[0] 
+            col = a["attr"].columns[0]
             desc = col.description
             t = a["type"] #INTEGER or VARCHAR(N)
             #MAY need to do upper case compares
@@ -306,36 +403,39 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
             else:
                 if name in columns:
                     list_of_columns.append(name)
-                
+
         from api.system.custom_endpoint import CustomEndpoint
         request.method = 'GET'
         r = CustomEndpoint(model_class=api_clz, fields=list_of_columns, filter_by=filter, pagesize=pagesize, offset=offset)
         result = r.execute(request=request)
-        return r.transform("IMATIA",key, result)
-    
+        service_type: str = Config.ONTIMIZE_SERVICE_TYPE
+        end_time = time.perf_counter()
+        print(f"Elapsed time: {end_time - start_time} seconds")
+        return r.transform(service_type, key, result) # JSONAPI or LAC or OntimizeEE ARGS.service_type
+
     def get_rows_by_query(api_clz, filter, orderBy, columns, pagesize, offset):
         #Old Style
         rows = []
         results = session.query(api_clz) # or list of columns?
-                    
+
         if columns:
             #stmt = select(api_clz).options(load_only(Book.title, Book.summary))
             pass #TODO
-        
+
         if orderBy:
             results = results.order_by(text(parseOrderBy(orderBy)))
 
         if filter:
-            results = results.filter(text(filter)) 
-            
+            results = results.filter(text(filter))
+
         results = results.limit(pagesize) \
-            .offset(offset) 
-        
+            .offset(offset)
+
         for row in results.all():
             rows.append(row.to_dict())
-        
+
         return rows
-                    
+
     def parseData(data:dict = None) -> str:
         # convert dict to str
         result = ""
@@ -345,16 +445,16 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
                 result += f'{join}{d}="{data[d]}"'
                 join = ","
         return result
-    
+
     def parseOrderBy(orderBy) -> str:
         #[{'columnName': 'SURNAME', 'ascendent': True}]
         result = ""
         if orderBy and len(orderBy) > 0:
             result = f"{orderBy[0]['columnName']}" #TODO for desc
         return result
-    
+
     def fix_payload(data, sqltypes):
-        import datetime 
+        import datetime
         if sqltypes:
             for t in sqltypes:
                 if sqltypes[t] == 91: #Date
