@@ -23,7 +23,7 @@ export const CONFIG: Config = {
 
   // The service type used (Ontimize REST standart, Ontimize REST JEE
   // or custom implementation) in the whole application. OntimizeEE or JSONAPI
-  serviceType: 'OntimizeEE',
+  serviceType: 'JSONAPI',
 
   // Configuration parameters of application services.
   servicesConfiguration: SERVICE_CONFIG,

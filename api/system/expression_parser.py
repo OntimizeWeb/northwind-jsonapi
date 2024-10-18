@@ -157,10 +157,12 @@ def fixup_data(data, sqltypes):
             if sqltypes and key in sqltypes and isinstance(value, str):
                 if sqltypes[key] in [-5,2,4,5,-6]: #BIGINT, TINYINT, INT, SMALLINT, INTEGER
                     data[key] = int(value)
+                elif  sqltypes[key] in [6]: #DECIMAL
+                    data[key] = Decimal(value)
             if sqltypes and key in sqltypes and sqltypes[key] in [91,93] and isinstance(value, int): #DATE, TIMESTAMP 
                 from datetime import datetime  
                 fmt = "%Y-%m-%d" if sqltypes[key] == 91 else "%Y-%m-%d %H:%M:%S"
-                data[key] = datetime.fromtimestamp(value / 1000).strftime(fmt)  
+                data[key] = datetime.fromtimestamp(value / 1000) #.strftime(fmt)  
     return data
 
 def _parseFilter(filter: dict, sqltypes: any):
@@ -302,6 +304,7 @@ def advancedFilter(cls, args) -> any:
         else:
             if isinstance(val, dict):
                 #if FILTER_EXPRESSION in item or BASIC_EXPRESSION in item:
+                #filter[filter[@basic_expression]]=
                 if "filter" in val:
                     # Ontimize Advanced Filter
                     #{'lop': 'CustomerId', 'op': 'LIKE', 'rop': '%A%'}
@@ -313,6 +316,8 @@ def advancedFilter(cls, args) -> any:
                     return expressions, sqlWhere
                 elif req_arg == 'filter[@basic_expression]' or req_arg == 'filter[@BASIC_EXPRESSION]':
                         filters.append({"lop": val['lop'], "op": val["op"], "rop": val["rop"]})
+                elif "rop" in val:
+                    filters.append(val)
                 else:
                     #{'id': '1', 'name': 'John'}
                     for f, value in val.items():
@@ -366,7 +371,7 @@ def advancedFilter(cls, args) -> any:
         if op_name not in ONTIMIZE_OPERATORS:
             raise ValidationError(f'Invalid filter {flt}, unknown operator: {op_name}')
         #join = flt.get("join", "").strip("_").lower()   
-        attr = cls._s_jsonapi_attrs[attr_name] if attr_name != "id" else cls.id if "id" in cls._s_jsonapi_attrs else cls.Id
+        attr = cls._s_jsonapi_attrs[attr_name] if attr_name != "id" else cls.id 
         if op_name in ["IN"]:
             expr = ExpressionHolder(expr=attr.in_(clean(attr_val)), join=join)
             expression_holder.append(expr)
