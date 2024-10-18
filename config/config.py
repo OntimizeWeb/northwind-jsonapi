@@ -100,15 +100,11 @@ class Config:
     BACKTIC_AS_QUOTE = False # use backtic as quote for table names for API Bridge
     if SQLALCHEMY_DATABASE_URI.startswith("mysql") or SQLALCHEMY_DATABASE_URI.startswith("mariadb"):
         BACKTIC_AS_QUOTE = True
-<<<<<<< HEAD
+
         
     ONTIMIZE_SERVICE_TYPE = "JSONAPI" # or  "OntimizeEE" uses the API Bridge / "JSONAPI" / "LAC" | Args.service_type
         
-=======
 
-    ONTIMIZE_SERVICE_TYPE = "JSONAPI" #  "OntimizeEE" uses the API Bridge / "JSONAPI" / "LAC" | Args.service_type
-
->>>>>>> 0bc35ae695e1a091a128d89c6d23bc546af0bb07
     app_logger.debug(f'config.py - SQLALCHEMY_DATABASE_URI: {SQLALCHEMY_DATABASE_URI}')
 
     # as desired, use env variable: export SQLALCHEMY_DATABASE_URI='sqlite:////Users/val/dev/servers/docker_api_logic_project/database/db.sqliteXX'
