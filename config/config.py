@@ -102,7 +102,7 @@ class Config:
         BACKTIC_AS_QUOTE = True
 
         
-    ONTIMIZE_SERVICE_TYPE = "JSONAPI" # or  "OntimizeEE" uses the API Bridge / "JSONAPI" / "LAC" | Args.service_type
+    ONTIMIZE_SERVICE_TYPE = "OntimizeEE" # or  "OntimizeEE" uses the API Bridge / "JSONAPI" / "LAC" | Args.service_type
         
 
     app_logger.debug(f'config.py - SQLALCHEMY_DATABASE_URI: {SQLALCHEMY_DATABASE_URI}')
@@ -285,9 +285,11 @@ class Args():
 
     @property
     def swagger_port(self) -> str:
-        """ swagger port (eg, 443 for codespaces) """
+        """ swagger port (eg, 443 for codespaces) (APILOGICPROJECT_EXTERNAL_PORT, also SWAGGER_PORT) """
+        if os.getenv("APILOGICPROJECT_EXTERNAL_PORT"):  
+            self.flask_app.config["SWAGGER_PORT"] = os.getenv("APILOGICPROJECT_EXTERNAL_PORT")
         return self.flask_app.config["SWAGGER_PORT"]
-
+    
     @swagger_port.setter
     def swagger_port(self, a):
         self.flask_app.config["SWAGGER_PORT"] = a
@@ -295,7 +297,9 @@ class Args():
 
     @property
     def swagger_host(self) -> str:
-        """ ip clients use to access API """
+        """ ip clients use to access API (APILOGICPROJECT_EXTERNAL_HOST, also SWAGGER_HOST) """
+        if os.getenv("APILOGICPROJECT_EXTERNAL_HOST"):  
+            self.flask_app.config["SWAGGER_HOST"] = os.getenv("APILOGICPROJECT_EXTERNAL_HOST")
         return self.flask_app.config["SWAGGER_HOST"]
 
     @swagger_host.setter

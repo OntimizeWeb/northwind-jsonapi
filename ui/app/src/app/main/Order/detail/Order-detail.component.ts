@@ -18,7 +18,10 @@ export class OrderDetailComponent implements OnInit {
   constructor(protected injector: Injector) {
     this.service = this.injector.get(OntimizeService);
     this.chartParameters = new PieChartConfiguration();
+    this.chartParameters.showLabels = true;
     this.chartParameters.showLeyend = false;
+    this.chartParameters.labelsOutside = true;
+    this.chartParameters.showTooltip = true;
   }
 
   ngOnInit() {

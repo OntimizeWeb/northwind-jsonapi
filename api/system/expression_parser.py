@@ -13,6 +13,7 @@ from sqlalchemy.orm import joinedload, Query
 from operator import not_, and_, or_, eq, ne, lt, le, gt, ge
 from sqlalchemy import or_ as OR_
 from sqlalchemy import and_ as AND_
+from decimal import Decimal
 
 BASIC_EXPRESSION =  "@basic_expression"
 """Ontimize Advanced Filter Expressions"""
@@ -142,7 +143,7 @@ def parseFilter(clz: any, filter: dict, sqltypes: any):
 
 def fixup_sort(clz, data):
     sort = None
-    if data:
+    if data and isinstance(data, list):
         for d in data:
             sort = []
             column_name = d["columnName"]

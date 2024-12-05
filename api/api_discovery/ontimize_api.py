@@ -153,6 +153,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         if method == "OPTIONS":
             return jsonify(success=True)
         start_time = time.perf_counter()
+
         if clz_name == "endsession":
             from flask import g
             sessionid = request.args.get("sessionid")
