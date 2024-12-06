@@ -52,7 +52,7 @@ def declare_logic():
 
     """         HOW RULES OPERATE
                 =================
-    Rules operate much like a spreadsheet:
+    #Rules operate much like a spreadsheet:
         Watch, for changes in referenced values
         React, by recomputing value
         Chain, to any referencing rules, including other tables (multi-table logic)
@@ -272,7 +272,7 @@ def declare_logic():
                 # copy_to_logic_row.row.attribute_name = value
                 copy_to_logic_row.insert(reason="Manual Copy " + copy_to_logic_row.name)  # triggers rules...
 
-        Rule.commit_row_event(on_class=Employee, calling=audit_by_event)
+        #Rule.commit_row_event(on_class=Employee, calling=audit_by_event)
     '''    
 
     def clone_order(row: Order, old_row: Order, logic_row: LogicRow):
@@ -330,7 +330,7 @@ def declare_logic():
     Rule.early_row_event_all_classes(early_row_event_all_classes=handle_all)
         
     Rule.formula(derive=Order.OrderDate, 
-                 as_expression=lambda row: datetime.datetime.now())
+        as_expression=lambda row: datetime.datetime.now())
     
     from api.system import api_utils
     # api_utils.rules_report()

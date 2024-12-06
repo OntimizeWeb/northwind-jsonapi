@@ -1,7 +1,9 @@
 <div class="container">
 
-  <o-form #form attr="Customer_form_edit" service="Customer" entity="Customer" fxLayout="column" show-header="yes" header-actions="R;I;U;D"
-    #oDetailForm keys="Id" keys-sql-types="VARCHAR" show-header-navigation="yes" (onDataLoaded)="onDataLoaded($event)">
+  <o-form #form attr="Customer_form_edit" service="Customer" entity="Customer" fxLayout="column" 
+    show-header="yes" header-actions="R;I;U;D"
+    #oDetailForm keys="Id" keys-sql-types="VARCHAR" show-header-navigation="yes" 
+    (onDataLoaded)="onDataLoaded($event)">
 
     <o-row attr="row1" layout-align="start stretch">
       <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">

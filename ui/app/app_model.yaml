@@ -5,28 +5,55 @@ about:
     add, toggles, images, security, login, virtual relns, global filters, no IsCommissioned,
     employee.notes as textarea, reln names
 api_root: '{http_type}://{swagger_host}:{port}/{api}'
-authentication: '{system-default}'
+authentication:
+  endpoint: '{system-default}'
 entities:
   Category:
     columns:
-    - label: ' Category Name*'
+    - enabled: true
+      exclude: false
+      label: 'Description '
+      name: Description
+      required: false
+      search: false
+      sort: false
+      template: textarea
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Category Name* '
       name: CategoryName
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: text
-    - name: Description
-      template: text
-      type: VARCHAR(8000)
-    - name: Client_id
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Client Id '
+      name: Client_id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: Id
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: CategoryName
+    group: data
     home_template: home_template.html
     info_list: <h1>Tour - Application Information, Authorization</h1> <h2>Application
       Information</h2> Info is set in the <span style="font-family:'Courier New'">ui/admin/admin.yaml</span>
@@ -44,69 +71,179 @@ entities:
     new_template: new_template.html
     primary_key:
     - Id
+    title: Category
     type: Category
   Customer:
     columns:
-    - name: Id
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - label: ' Company Name*'
-      name: CompanyName
-      search: true
-      sort: true
-      template: text
-      type: VARCHAR(8000)
-    - info: derived as sum(Order.AmountTotal where ShippedDate is None)
+      visible: true
+    - derivation: 'Rule.sum(derive=Customer.Balance,        as_sum_of=Order.AmountTotal,where=lambda
+        row: row.ShippedDate is None and row.Ready == True)'
+      enabled: true
+      exclude: false
+      label: 'Balance '
       name: Balance
+      required: false
+      search: false
+      sort: false
+      template: text
       type: DECIMAL
-    - info: Balance may not exceed this value
-      name: CreditLimit
-      type: DECIMAL
-    - default: '0'
-      info: derived as sum(Order)
+      visible: true
+    - derivation: Rule.count(derive=Customer.OrderCount, as_count_of=Order)
+      enabled: true
+      exclude: false
+      label: 'Ordercount '
       name: OrderCount
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - default: '0'
-      info: derived as count(Order where ShippedDate is None)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Client Id '
+      name: Client_id
+      required: false
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Contacttitle '
+      name: ContactTitle
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'City '
+      name: City
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Postalcode '
+      name: PostalCode
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Phone '
+      name: Phone
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Company Name* '
+      name: CompanyName
+      required: false
+      search: true
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Creditlimit '
+      name: CreditLimit
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: DECIMAL
+      visible: true
+    - derivation: 'Rule.count(derive=Customer.UnpaidOrderCount,as_count_of=Order,where=lambda
+        row: row.ShippedDate is None)'
+      enabled: true
+      exclude: false
+      label: 'Unpaidordercount '
       name: UnpaidOrderCount
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: Client_id
-      template: integer
-      type: INTEGER
-    - name: ContactName
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Contactname '
+      name: ContactName
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: ContactTitle
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Address '
+      name: Address
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Address
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Region '
+      name: Region
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: City
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Country '
+      name: Country
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Region
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Fax '
+      name: Fax
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: PostalCode
-      template: text
-      type: VARCHAR(8000)
-    - name: Country
-      template: text
-      type: VARCHAR(8000)
-    - name: Phone
-      template: text
-      type: VARCHAR(8000)
-    - name: Fax
-      template: text
-      type: VARCHAR(8000)
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: CompanyName
+    group: data
     home_template: home_template.html
     info_list: <h1>List Pages</h1> In this <a target="_blank" href="https://apilogicserver.github.io/Docs/Sample-Database/">Northwind
       demo,</a> Info provides Tour suggestions (see Category for instructions).  On
@@ -135,55 +272,102 @@ entities:
     new_template: new_template.html
     primary_key:
     - Id
+    rules:
+      contraints:
+      - 'Rule.constraint(validate=Customer,       as_condition=lambda row: row.Balance
+        <= row.CreditLimit,error_msg="balance ({round(row.Balance, 2)}) exceeds credit
+        ({round(row.CreditLimit, 2)})")'
+      events:
+      - Rule.early_row_event(on_class=Customer, calling=customer_defaults)
     tab_groups:
     - direction: tomany
+      exclude: false
       fks:
       - CustomerId
       label: Placed Order List
       name: OrderList
       resource: Order
+    title: Customer
     type: Customer
   CustomerDemographic:
     columns:
-    - label: ' Id*'
+    - enabled: true
+      exclude: false
+      label: 'Id* '
       name: Id
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: CustomerDesc
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Customerdesc '
+      name: CustomerDesc
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: Id
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
     primary_key:
     - Id
+    title: CustomerDemographic
     type: CustomerDemographic
   Department:
     columns:
-    - label: ' Department Name*'
+    - enabled: true
+      exclude: false
+      label: 'Department Name* '
       name: DepartmentName
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(100)
-    - name: DepartmentId
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: Id
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Departmentid '
+      name: DepartmentId
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - default: '0'
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Securitylevel '
       name: SecurityLevel
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: DepartmentName
+    group: data
     home_template: home_template.html
     info_list: <h1>Tour - Authorization</h1> <h2>Global Security Filters</h2> Only
       role sa & manager can view SecurityLevel > 0 - see security/declare_security.py
@@ -194,102 +378,271 @@ entities:
     - Id
     tab_groups:
     - direction: tomany
+      exclude: false
       fks:
       - DepartmentId
+      label: DepartmentList
       name: DepartmentList
       resource: Department
     - direction: tomany
+      exclude: false
       fks:
       - OnLoanDepartmentId
+      label: EmployeeList
       name: EmployeeList
       resource: Employee
     - direction: tomany
+      exclude: false
       fks:
       - WorksForDepartmentId
+      label: WorksForEmployeeList
       name: WorksForEmployeeList
       resource: Employee
     - direction: toone
+      exclude: false
       fks:
       - DepartmentId
+      label: Department
       name: Department
       resource: Department
+    title: Department
     type: Department
   Employee:
     columns:
-    - label: ' Last Name*'
-      name: LastName
-      search: true
-      sort: true
-      template: text
-      type: VARCHAR(8000)
-    - name: OnLoanDepartmentId
-      template: integer
-      type: INTEGER
-    - name: WorksForDepartmentId
-      template: integer
-      type: INTEGER
-    - name: Salary
-      type: DECIMAL
-    - name: ProperSalary
-      type: DECIMAL
-    - default: Salaried
+    - enabled: true
+      exclude: false
+      label: 'Employeetype '
       name: EmployeeType
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(16)
-    - name: Dues
-      show_when: record["EmployeeType"] == "Hourly"
-      type: DECIMAL
-    - name: FirstName
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Firstname '
+      name: FirstName
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Id
-      template: integer
-      type: INTEGER
-    - name: Title
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Title '
+      name: Title
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: TitleOfCourtesy
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Birthdate '
+      name: BirthDate
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: BirthDate
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Address '
+      name: Address
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: HireDate
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Region '
+      name: Region
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Address
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Country '
+      name: Country
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: City
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Extension '
+      name: Extension
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Region
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Photopath '
+      name: PhotoPath
+      required: false
+      search: false
+      sort: false
       template: text
-      type: VARCHAR(8000)
-    - name: PostalCode
-      template: text
-      type: VARCHAR(8000)
-    - name: Country
-      template: text
-      type: VARCHAR(8000)
-    - name: HomePhone
-      template: text
-      type: VARCHAR(8000)
-    - name: Extension
-      template: text
-      type: VARCHAR(8000)
-    - name: ReportsTo
-      template: integer
-      type: INTEGER
-    - name: PhotoPath
       type: image
-    - name: Notes
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Last Name* '
+      name: LastName
+      required: false
+      search: true
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Worksfordepartmentid '
+      name: WorksForDepartmentId
+      required: false
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Propersalary '
+      name: ProperSalary
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: DECIMAL
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Dues '
+      name: Dues
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: DECIMAL
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Titleofcourtesy '
+      name: TitleOfCourtesy
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Hiredate '
+      name: HireDate
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'City '
+      name: City
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Postalcode '
+      name: PostalCode
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Homephone '
+      name: HomePhone
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Reportsto '
+      name: ReportsTo
+      required: false
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Notes '
+      name: Notes
+      required: false
+      search: false
+      sort: false
+      template: text
       type: textarea
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Onloandepartmentid '
+      name: OnLoanDepartmentId
+      required: false
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Salary '
+      name: Salary
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: DECIMAL
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: LastName
-    grid_items: 'EmployeeType, LastName, FirstName, Address, City, PostalCode, Country, HomePhone'
-    grid_image: PhotoPath
+    group: data
     home_template: grid_template.html
     info_list: <h1>Show When</h1> Support for <a target="_blank" href="https://apilogicserver.github.io/Docs/Admin-Customization/#show_when">Show
       When</a> means you can define expressions that determine when a field is shown
@@ -310,75 +663,162 @@ entities:
     new_template: new_template.html
     primary_key:
     - Id
+    rules:
+      contraints:
+      - Rule.constraint(validate=Employee,calling=raise_over_20_percent,error_msg="{row.LastName}
+        needs a more meaningful raise")
+      events: []
     tab_groups:
     - direction: tomany
+      exclude: false
       fks:
       - EmployeeId
+      label: EmployeeAuditList
       name: EmployeeAuditList
       resource: EmployeeAudit
     - direction: tomany
+      exclude: false
       fks:
       - EmployeeId
+      label: EmployeeTerritoryList
       name: EmployeeTerritoryList
       resource: EmployeeTerritory
     - direction: tomany
+      exclude: false
       fks:
       - EmployeeId
+      label: OrderList
       name: OrderList
       resource: Order
     - direction: toone
+      exclude: false
       fks:
       - OnLoanDepartmentId
+      label: OnLoanDepartment
       name: OnLoanDepartment
       resource: Department
     - direction: toone
+      exclude: false
       fks:
       - UnionId
+      label: Union
       name: Union
       resource: Union
     - direction: toone
+      exclude: false
       fks:
       - WorksForDepartmentId
+      label: WorksForDepartment
       name: WorksForDepartment
       resource: Department
+    title: Employee
     type: Employee
   EmployeeAudit:
     columns:
-    - label: ' Last Name*'
-      name: LastName
-      search: true
-      sort: true
-      template: text
-      type: VARCHAR
-    - name: EmployeeId
+    - enabled: true
+      exclude: false
+      label: 'Employeeid '
+      name: EmployeeId
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: Title
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Salary '
+      name: Salary
+      required: false
+      search: false
+      sort: false
       template: text
-      type: VARCHAR
-    - name: Salary
       type: DECIMAL
-    - name: FirstName
-      template: text
-      type: VARCHAR
-    - name: CreatedOn
-      template: text
-      type: TEXT
-    - name: CreatedBy
-      template: text
-      type: TEXT
-    - name: UpdatedOn
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Createdon '
+      name: CreatedOn
+      required: false
+      search: false
+      sort: false
       template: text
       type: TEXT
-    - name: UpdatedBy
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Updatedon '
+      name: UpdatedOn
+      required: false
+      search: false
+      sort: false
       template: text
       type: TEXT
-    - name: Id
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Last Name* '
+      name: LastName
+      required: false
+      search: true
+      sort: false
+      template: text
+      type: VARCHAR
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Title '
+      name: Title
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Firstname '
+      name: FirstName
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Createdby '
+      name: CreatedBy
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: TEXT
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Updatedby '
+      name: UpdatedBy
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: TEXT
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: LastName
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
@@ -386,29 +826,50 @@ entities:
     - Id
     tab_groups:
     - direction: toone
+      exclude: false
       fks:
       - EmployeeId
+      label: Employee
       name: Employee
       resource: Employee
+    title: EmployeeAudit
     type: EmployeeAudit
   EmployeeTerritory:
     columns:
-    - label: ' Id*'
+    - enabled: true
+      exclude: false
+      label: 'Territoryid '
+      name: TerritoryId
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id* '
       name: Id
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: TerritoryId
-      template: text
-      type: VARCHAR(8000)
-    - name: EmployeeId
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Employeeid '
+      name: EmployeeId
       required: true
+      search: false
+      sort: false
       template: integer
       type: INTEGER
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: Id
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
@@ -416,35 +877,57 @@ entities:
     - Id
     tab_groups:
     - direction: toone
+      exclude: false
       fks:
       - TerritoryId
+      label: Territory
       name: Territory
       resource: Territory
     - direction: toone
+      exclude: false
       fks:
       - EmployeeId
+      label: Employee
       name: Employee
       resource: Employee
+    title: EmployeeTerritory
     type: EmployeeTerritory
   Location:
     columns:
-    - label: ' country*'
+    - enabled: true
+      exclude: false
+      label: 'Country* '
       name: country
       required: true
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(50)
-    - name: city
-      required: true
-      template: text
-      type: VARCHAR(50)
-    - name: notes
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Notes '
+      name: notes
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(256)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'City '
+      name: city
+      required: true
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(50)
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: country
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
@@ -453,86 +936,224 @@ entities:
     - city
     tab_groups:
     - direction: tomany
+      exclude: false
       fks:
       - Country
       - City
+      label: OrderList
       name: OrderList
       resource: Order
+    title: Location
     type: Location
   Order:
     columns:
-    - name: Id
-      show_when: isInserting == false
+    - enabled: true
+      exclude: false
+      label: 'Employeeid '
+      name: EmployeeId
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: EmployeeId
-      template: integer
-      type: INTEGER
-    - info: set reduces Customer Balance, decreases Product Stock
-      name: ShippedDate
-      show_when: isInserting == false
+      visible: true
+    - derivation: 'Rule.formula(derive=Order.OrderDate,as_expression=lambda row: datetime.datetime.now())'
+      enabled: true
+      exclude: false
+      label: 'Orderdate '
+      name: OrderDate
+      required: false
+      search: false
+      sort: false
       template: text
-      type: VARCHAR(8000)
-    - name: OrderDate
       type: DATE
-    - info: derived as sum(OrderDetail.Amount)
-      name: AmountTotal
-      show_when: isInserting == false
-      type: DECIMAL
-    - name: Ready
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Ready '
+      name: Ready
+      required: false
+      search: false
+      sort: false
+      template: text
       type: Boolean
-    - name: CloneFromOrder
-      template: integer
-      type: INTEGER
-    - default: '0'
+      visible: true
+    - derivation: Rule.count(derive=Order.OrderDetailCount, as_count_of=OrderDetail)
+      enabled: true
+      exclude: false
+      label: 'Orderdetailcount '
       name: OrderDetailCount
-      show_when: isInserting == false
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: Freight
-      type: DECIMAL
-    - label: Country
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Country '
       name: Country
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(50)
-    - label: City
-      name: City
-      template: text
-      type: VARCHAR(50)
-    - name: RequiredDate
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Requireddate '
+      name: RequiredDate
+      required: false
+      search: false
+      sort: false
       template: date
       type: DATE
-    - name: CustomerId
-      required: true
-      template: text
-      type: VARCHAR(8000)
-    - label: ' Ship Name*'
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Ship Name* '
       name: ShipName
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: ShipVia
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Shipaddress '
+      name: ShipAddress
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Shipregion '
+      name: ShipRegion
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Shipcountry '
+      name: ShipCountry
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: ShipAddress
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Shippeddate '
+      name: ShippedDate
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: ShipCity
+      visible: true
+    - derivation: Rule.sum(derive=Order.AmountTotal,       as_sum_of=OrderDetail.Amount)
+      enabled: true
+      exclude: false
+      label: 'Amounttotal '
+      name: AmountTotal
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: DECIMAL
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Clonefromorder '
+      name: CloneFromOrder
+      required: false
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Freight '
+      name: Freight
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: DECIMAL
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'City '
+      name: City
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(50)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Customerid '
+      name: CustomerId
+      required: true
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: ShipRegion
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Shipvia '
+      name: ShipVia
+      required: false
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Shipcity '
+      name: ShipCity
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: ShipZip
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Shipzip '
+      name: ShipZip
+      required: false
+      search: false
+      sort: false
       template: text
       type: text
-    - name: ShipCountry
-      template: text
-      type: VARCHAR(8000)
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: Id
+    group: data
     home_template: home_template.html
     info_show: <h1>Tour</h1> <h3>Automatic Joins</h3> <ul> <li> Observe the Product
       Name in the Order Detail list.</li> <li> In the <a target="_blank" href="https://apilogicserver.github.io/Docs/Sample-Database/">sample
@@ -550,138 +1171,283 @@ entities:
     new_template: new_template.html
     primary_key:
     - Id
+    rules:
+      contraints:
+      - Rule.constraint(validate=Order,       calling=ship_ready_orders_only,error_msg="Cannot
+        Ship Order that is not Ready")
+      events:
+      - Rule.after_flush_row_event(on_class=Order, calling=send_order_to_shipping)
+      - Rule.commit_row_event(on_class=Order, calling=congratulate_sales_rep)
+      - Rule.commit_row_event(on_class=Order, calling=do_not_ship_empty_orders)
+      - Rule.early_row_event(on_class=Order, calling=order_defaults)
+      - Rule.row_event(on_class=Order, calling=clone_order)
     tab_groups:
     - direction: tomany
+      exclude: false
       fks:
       - OrderId
       label: Order Detail List
       name: OrderDetailList
       resource: OrderDetail
     - direction: toone
+      exclude: false
       fks:
       - CustomerId
+      label: Customer
       name: Customer
       resource: Customer
     - direction: toone
+      exclude: false
       fks:
       - Country
       - City
+      label: Location
       name: Location
       resource: Location
     - direction: toone
+      exclude: false
       fks:
       - EmployeeId
+      label: Employee
       name: Employee
       resource: Employee
+    title: Order
     type: Order
   OrderDetail:
     columns:
-    - label: ' Id*'
-      name: Id
-      search: true
-      show_when: isInserting == false
-      sort: true
-      template: integer
-      type: INTEGER
-    - name: ProductId
+    - enabled: true
+      exclude: false
+      label: 'Productid '
+      name: ProductId
       required: true
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: OrderId
-      required: true
-      show_when: isInserting == false
-      template: integer
-      type: INTEGER
-    - info: derived as copy(Product.UnitPrice)
+      visible: true
+    - derivation: Rule.copy(derive=OrderDetail.UnitPrice,  from_parent=Product.UnitPrice)
+      enabled: true
+      exclude: false
+      label: 'Unitprice '
       name: UnitPrice
-      show_when: isInserting == false
+      required: false
+      search: false
+      sort: false
+      template: text
       type: DECIMAL
-    - default: '1'
-      name: Quantity
-      template: integer
-      type: INTEGER
-    - default: '0'
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Discount '
       name: Discount
+      required: false
+      search: false
+      sort: false
       template: real
       type: DOUBLE
-    - info: derived as UnitPrice * Quantity
-      name: Amount
-      show_when: isInserting == false
-      type: DECIMAL
-    - info: derived as Order.ShippedDate
+      visible: true
+    - derivation: Rule.formula(derive=OrderDetail.ShippedDate,  as_exp="row.Order.ShippedDate")
+      enabled: true
+      exclude: false
+      label: 'Shippeddate '
       name: ShippedDate
-      show_when: isInserting == false
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id* '
+      name: Id
+      required: false
+      search: true
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Orderid '
+      name: OrderId
+      required: true
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Quantity '
+      name: Quantity
+      required: false
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - derivation: 'Rule.formula(derive=OrderDetail.Amount,  as_expression=lambda row:
+        row.UnitPrice * row.Quantity)'
+      enabled: true
+      exclude: false
+      label: 'Amount '
+      name: Amount
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: DECIMAL
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: Id
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
     primary_key:
     - Id
+    rules:
+      contraints: []
+      events:
+      - Rule.early_row_event(on_class=OrderDetail, calling=order_detail_defaults)
     tab_groups:
     - direction: toone
+      exclude: false
       fks:
       - ProductId
+      label: Product
       name: Product
       resource: Product
     - direction: toone
+      exclude: false
       fks:
       - OrderId
+      label: Order
       name: Order
       resource: Order
+    title: OrderDetail
     type: OrderDetail
   Product:
     columns:
-    - label: ' Product Name*'
-      name: ProductName
-      search: true
-      sort: true
+    - enabled: true
+      exclude: false
+      label: 'Quantityperunit '
+      name: QuantityPerUnit
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: QuantityPerUnit
-      template: text
-      type: VARCHAR(8000)
-    - name: UnitPrice
-      required: true
-      type: DECIMAL
-    - info: derived as UnitsInStock - (UnitsShipped - old_row.UnitsShipped)
+      visible: true
+    - derivation: Rule.formula(derive=Product.UnitsInStock, calling=units_in_stock)
+      enabled: true
+      exclude: false
+      label: 'Unitsinstock '
       name: UnitsInStock
       required: true
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: UnitsOnOrder
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Reorderlevel '
+      name: ReorderLevel
       required: true
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: ReorderLevel
+      visible: true
+    - derivation: 'Rule.sum(derive=Product.UnitsShipped,as_sum_of=OrderDetail.Quantity,where=lambda
+        row: row.ShippedDate is None)'
+      enabled: true
+      exclude: false
+      label: 'Unitsshipped '
+      name: UnitsShipped
+      required: false
+      search: false
+      sort: false
+      template: integer
+      type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Supplierid '
+      name: SupplierId
       required: true
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: Discontinued
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Product Name* '
+      name: ProductName
+      required: false
+      search: true
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Unitprice '
+      name: UnitPrice
       required: true
+      search: false
+      sort: false
+      template: text
+      type: DECIMAL
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Unitsonorder '
+      name: UnitsOnOrder
+      required: true
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: UnitsShipped
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Discontinued '
+      name: Discontinued
+      required: true
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - info: derived as sum(OrderDetail.Quantity where ShippedDate is not None)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
       name: Id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: SupplierId
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Categoryid '
+      name: CategoryId
       required: true
+      search: false
+      sort: false
       template: integer
       type: INTEGER
-    - name: CategoryId
-      required: true
-      template: integer
-      type: INTEGER
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: ProductName
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
@@ -689,122 +1455,259 @@ entities:
     - Id
     tab_groups:
     - direction: tomany
+      exclude: false
       fks:
       - ProductId
+      label: OrderDetailList
       name: OrderDetailList
       resource: OrderDetail
+    title: Product
     type: Product
   Region:
     columns:
-    - label: ' Region Description*'
+    - enabled: true
+      exclude: false
+      label: 'Region Description* '
       name: RegionDescription
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Id
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: RegionDescription
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
     primary_key:
     - Id
+    title: Region
     type: Region
   Shipper:
     columns:
-    - label: ' Company Name*'
+    - enabled: true
+      exclude: false
+      label: 'Company Name* '
       name: CompanyName
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Phone
-      template: text
-      type: VARCHAR(8000)
-    - name: Id
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Phone '
+      name: Phone
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: CompanyName
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
     primary_key:
     - Id
+    title: Shipper
     type: Shipper
   Supplier:
     columns:
-    - label: ' Company Name*'
-      name: CompanyName
-      search: true
-      sort: true
+    - enabled: true
+      exclude: false
+      label: 'Contactname '
+      name: ContactName
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: ContactName
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Address '
+      name: Address
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: ContactTitle
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Region '
+      name: Region
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Address
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Country '
+      name: Country
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: City
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Fax '
+      name: Fax
+      required: false
+      search: false
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Region
-      template: text
-      type: VARCHAR(8000)
-    - name: PostalCode
-      template: text
-      type: VARCHAR(8000)
-    - name: Country
-      template: text
-      type: VARCHAR(8000)
-    - name: Phone
-      template: text
-      type: VARCHAR(8000)
-    - name: Fax
-      template: text
-      type: VARCHAR(8000)
-    - name: HomePage
-      template: text
-      type: VARCHAR(8000)
-    - name: Id
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Company Name* '
+      name: CompanyName
+      required: false
+      search: true
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Contacttitle '
+      name: ContactTitle
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'City '
+      name: City
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Postalcode '
+      name: PostalCode
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Phone '
+      name: Phone
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Homepage '
+      name: HomePage
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: CompanyName
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
     primary_key:
     - Id
+    title: Supplier
     type: Supplier
   Territory:
     columns:
-    - label: ' Territory Description*'
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
+      template: text
+      type: VARCHAR(8000)
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Territory Description* '
       name: TerritoryDescription
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(8000)
-    - name: Id
-      template: text
-      type: VARCHAR(8000)
-    - name: RegionId
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Regionid '
+      name: RegionId
       required: true
+      search: false
+      sort: false
       template: integer
       type: INTEGER
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: TerritoryDescription
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
@@ -812,25 +1715,40 @@ entities:
     - Id
     tab_groups:
     - direction: tomany
+      exclude: false
       fks:
       - TerritoryId
+      label: EmployeeTerritoryList
       name: EmployeeTerritoryList
       resource: EmployeeTerritory
+    title: Territory
     type: Territory
   Union:
     columns:
-    - label: ' Name*'
+    - enabled: true
+      exclude: false
+      label: 'Name* '
       name: Name
+      required: false
       search: true
-      sort: true
+      sort: false
       template: text
       type: VARCHAR(80)
-    - name: Id
+      visible: true
+    - enabled: true
+      exclude: false
+      label: 'Id '
+      name: Id
+      required: false
+      search: false
+      sort: false
       template: integer
       type: INTEGER
+      visible: true
     detail_template: detail_template.html
-    exclude: 'false'
+    exclude: false
     favorite: Name
+    group: data
     home_template: home_template.html
     mode: tab
     new_template: new_template.html
@@ -838,14 +1756,32 @@ entities:
     - Id
     tab_groups:
     - direction: tomany
+      exclude: false
       fks:
       - UnionId
+      label: EmployeeList
       name: EmployeeList
       resource: Employee
+    title: Union
     type: Union
+grants:
+  Customer_customer:
+    can_delete: false
+    can_insert: false
+    can_read: false
+    can_update: false
+    filter: 'lambda: models.Customer.Id == Security.current_user().id,filter_debug="Id
+      == Security.current_user().id",'
+    filter_debug: '"Id == Security.current_user().id",'
+  Customer_sales:
+    can_delete: false
+    can_insert: false
+    can_read: false
+    can_update: false
+    filter: 'lambda: models.Customer.CreditLimit > 300,filter_debug="CreditLimit >
+      300",'
+    filter_debug: '"CreditLimit > 300",'
 settings:
-  HomeJS: http://localhost:5656/admin-app/home.js
-  max_list_columns: 8
   style_guide:
     currency_symbol: $
     currency_symbol_position: left
@@ -865,3 +1801,34 @@ settings:
     style: light
     thousand_separator: ','
     use_keycloak: false
+user_roles:
+  customer:
+    can_delete: false
+    can_insert: false
+    can_read: true
+    can_update: false
+  manager:
+    can_delete: false
+    can_insert: false
+    can_read: true
+    can_update: false
+  public:
+    can_delete: false
+    can_insert: false
+    can_read: true
+    can_update: false
+  renter:
+    can_delete: false
+    can_insert: false
+    can_read: true
+    can_update: false
+  sales:
+    can_delete: false
+    can_insert: false
+    can_read: true
+    can_update: false
+  tenant:
+    can_delete: true
+    can_insert: false
+    can_read: true
+    can_update: false
