@@ -11,6 +11,7 @@ export class CustomerDetailComponent implements OnInit  {
   protected service: OntimizeService;
 
   @ViewChild('oDetailForm') form: OFormComponent;
+  
   constructor(protected injector: Injector) {
     this.service = this.injector.get(OntimizeService);
   }

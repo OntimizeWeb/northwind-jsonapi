@@ -107,12 +107,12 @@ Grant(
 ) 
 # this eliminates all British Isle rows, but...
 '''
-Grant(
-    on_entity=models.Customer,
-    to_role=Roles.sales,
-    filter=lambda: models.Customer.ContactName == "Mike", 
-    filter_debug="ContactName == Mike (see security/declare_security.py)",
-)
+    #Grant(
+        on_entity=models.Customer,
+        to_role=Roles.sales,
+        filter=lambda: models.Customer.ContactName == "Mike", 
+        filter_debug="ContactName == Mike (see security/declare_security.py)",
+    )
 '''
 # so user s1 sees the CTWSR customer row, per the resulting where from 2 global filters and 2 Grants:
 # where (Client_id=2 and region="British Isles") and (CreditLimit>300 or ContactName="Mike")
