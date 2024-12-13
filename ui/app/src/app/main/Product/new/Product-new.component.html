@@ -6,27 +6,27 @@ after-insert-mode="new" class="standalone-form-container" (onInsertMode)="onInse
 <o-row attr="row1" layout-align="start stretch">
   <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
     
-        <o-text-input #ProductName attr="ProductName" label=" Product Name*" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+        <o-integer-input #UnitsInStock attr="UnitsInStock" label="Unitsinstock " type="integer" editable="no" required="yes" ></o-integer-input>
       
-        <o-text-input #QuantityPerUnit attr="QuantityPerUnit" label="QuantityPerUnit" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+        <o-integer-input #UnitsShipped attr="UnitsShipped" label="Unitsshipped " type="integer" editable="no" required="no" ></o-integer-input>
       
-        <o-real-input #UnitPrice attr="UnitPrice" label="UnitPrice" min-decimal-digits="2" max-decimal-digits="4" min="0" max="1000000000" fxFlex="20%" class="form-field"></o-real-input>
+        <o-text-input #ProductName attr="ProductName" label="Product Name* " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-        <o-integer-input #UnitsInStock attr="UnitsInStock" label="UnitsInStock" type="integer" editable="no" required="yes" ></o-integer-input>
+        <o-integer-input #UnitsOnOrder attr="UnitsOnOrder" label="Unitsonorder " type="integer" editable="no" required="yes" ></o-integer-input>
       
-        <o-integer-input #UnitsOnOrder attr="UnitsOnOrder" label="UnitsOnOrder" type="integer" editable="no" required="yes" ></o-integer-input>
+        <o-integer-input #Id attr="Id" label="Id " type="integer" editable="no" required="no" ></o-integer-input>
       
-        <o-integer-input #ReorderLevel attr="ReorderLevel" label="ReorderLevel" type="integer" editable="no" required="yes" ></o-integer-input>
+        <o-text-input #QuantityPerUnit attr="QuantityPerUnit" label="Quantityperunit " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-        <o-integer-input #Discontinued attr="Discontinued" label="Discontinued" type="integer" editable="no" required="yes" ></o-integer-input>
+        <o-integer-input #ReorderLevel attr="ReorderLevel" label="Reorderlevel " type="integer" editable="no" required="yes" ></o-integer-input>
       
-        <o-integer-input #UnitsShipped attr="UnitsShipped" label="UnitsShipped" type="integer" editable="no" required="no" ></o-integer-input>
+        <o-integer-input #SupplierId attr="SupplierId" label="Supplierid " type="integer" editable="no" required="yes" ></o-integer-input>
       
-        <o-integer-input #Id attr="Id" label="Id" type="integer" editable="no" required="no" ></o-integer-input>
+        <o-integer-input #Discontinued attr="Discontinued" label="Discontinued " type="integer" editable="no" required="yes" ></o-integer-input>
       
-        <o-integer-input #SupplierId attr="SupplierId" label="SupplierId" type="integer" editable="no" required="yes" ></o-integer-input>
+        <o-integer-input #CategoryId attr="CategoryId" label="Categoryid " type="integer" editable="no" required="yes" ></o-integer-input>
       
-        <o-integer-input #CategoryId attr="CategoryId" label="CategoryId" type="integer" editable="no" required="yes" ></o-integer-input>
+        <o-currency-input #UnitPrice attr="UnitPrice" title="Unitprice " type="currency" editable="no" required="yes" currency-symbol="$" currency-symbol-position="left" thousand-separator="," decimal-separator="."></o-currency-input>
       
 </div>
 </o-row>

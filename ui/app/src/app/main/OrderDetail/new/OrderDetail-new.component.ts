@@ -9,7 +9,7 @@ import { NavigationService, OFormComponent } from 'ontimize-web-ngx';
 export class OrderDetailNewComponent {
   @ViewChild("OrderDetailForm") form: OFormComponent;
   onInsertMode() {
-    const default_values = {'Quantity': '1', 'Discount': '0'}
+    const default_values = {}
     this.form.setFieldValues(default_values);
   }
   constructor(protected injector: Injector) {

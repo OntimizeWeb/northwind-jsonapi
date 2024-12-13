@@ -14,27 +14,27 @@
   <o-row attr="row1" layout-align="start stretch">
     <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
       
-      <o-text-input #ProductName attr="ProductName" label=" Product Name*" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      <o-integer-input #UnitsInStock attr="UnitsInStock" label="Unitsinstock " type="integer" editable="no" required="yes" ></o-integer-input>
       
-      <o-text-input #QuantityPerUnit attr="QuantityPerUnit" label="QuantityPerUnit" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      <o-integer-input #UnitsShipped attr="UnitsShipped" label="Unitsshipped " type="integer" editable="no" required="no" ></o-integer-input>
       
-      <o-real-input #UnitPrice attr="UnitPrice" label="UnitPrice" min-decimal-digits="2" max-decimal-digits="4" min="0" max="1000000000" fxFlex="20%" class="form-field"></o-real-input>
+      <o-text-input #ProductName attr="ProductName" label="Product Name* " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-      <o-integer-input #UnitsInStock attr="UnitsInStock" label="UnitsInStock" type="integer" editable="no" required="yes" ></o-integer-input>
+      <o-integer-input #UnitsOnOrder attr="UnitsOnOrder" label="Unitsonorder " type="integer" editable="no" required="yes" ></o-integer-input>
       
-      <o-integer-input #UnitsOnOrder attr="UnitsOnOrder" label="UnitsOnOrder" type="integer" editable="no" required="yes" ></o-integer-input>
+      <o-integer-input #Id attr="Id" label="Id " type="integer" editable="no" required="no" ></o-integer-input>
       
-      <o-integer-input #ReorderLevel attr="ReorderLevel" label="ReorderLevel" type="integer" editable="no" required="yes" ></o-integer-input>
+      <o-text-input #QuantityPerUnit attr="QuantityPerUnit" label="Quantityperunit " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-      <o-integer-input #Discontinued attr="Discontinued" label="Discontinued" type="integer" editable="no" required="yes" ></o-integer-input>
+      <o-integer-input #ReorderLevel attr="ReorderLevel" label="Reorderlevel " type="integer" editable="no" required="yes" ></o-integer-input>
       
-      <o-integer-input #UnitsShipped attr="UnitsShipped" label="UnitsShipped" type="integer" editable="no" required="no" ></o-integer-input>
+      <o-integer-input #SupplierId attr="SupplierId" label="Supplierid " type="integer" editable="no" required="yes" ></o-integer-input>
       
-      <o-integer-input #Id attr="Id" label="Id" type="integer" editable="no" required="no" ></o-integer-input>
+      <o-integer-input #Discontinued attr="Discontinued" label="Discontinued " type="integer" editable="no" required="yes" ></o-integer-input>
       
-      <o-integer-input #SupplierId attr="SupplierId" label="SupplierId" type="integer" editable="no" required="yes" ></o-integer-input>
+      <o-integer-input #CategoryId attr="CategoryId" label="Categoryid " type="integer" editable="no" required="yes" ></o-integer-input>
       
-      <o-integer-input #CategoryId attr="CategoryId" label="CategoryId" type="integer" editable="no" required="yes" ></o-integer-input>
+      <o-currency-input #UnitPrice attr="UnitPrice" title="Unitprice " type="currency" editable="no" required="yes" currency-symbol="$" currency-symbol-position="left" thousand-separator="," decimal-separator="."></o-currency-input>
       
     </div>
   </o-row>
@@ -49,11 +49,11 @@
         entity="OrderDetail" 
         keys="Id"
         parent-keys="ProductId:Id"
-        columns="Id;ProductId;OrderId;UnitPrice;Quantity;Discount;Amount;ShippedDate"  
+        columns="ShippedDate;OrderId;Amount;UnitPrice;ProductId;Discount;Id;Quantity"  
         horizontal-scroll="yes"
         detail-form-route="OrderDetail" 
         edit-form-route="OrderDetail"
-        visible-columns="Id;ProductId;OrderId;UnitPrice;Quantity;Discount;Amount;ShippedDate"  
+        visible-columns="ShippedDate;OrderId;Amount;UnitPrice;ProductId;Discount;Id;Quantity"  
         sort-columns="Id" 
         query-rows="25" 
         quick-filter="yes"
@@ -69,16 +69,7 @@
         edition-mode="dblclick" 
         horizontal-scroll="yes" class="fill-form">
         
-          <o-table-column #Id attr="Id" title=" Id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
-        
-          <o-table-column attr="ProductId" title="Product">
-    <o-table-cell-renderer-service attr="ProductId" 
-        service="Product" entity="ProductType" columns="Id;ProductName"
-        parent-keys="Id:ProductId"
-        value-column="ProductName" keys="ProductId"
-        visible-columns="ProductName" separator=" - " width="680px">
-    </o-table-cell-renderer-service>
-</o-table-column>
+          <o-date-input #ShippedDate attr="ShippedDate" type="timestamp" label="Shippeddate " editable="no" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
         
           <o-table-column attr="OrderId" title="Order">
     <o-table-cell-renderer-service attr="OrderId" 
@@ -89,15 +80,24 @@
     </o-table-cell-renderer-service>
 </o-table-column>
         
-          <o-table-column #UnitPrice attr="UnitPrice" title="UnitPrice" type="real" min-decimal-digits="2" max-decimal-digits="4" min="0" max="1000000.0000" content-align="center"></o-table-column>
+          <o-table-column #Amount attr="Amount" title="Amount " type="currency" editable="no" required="no" currency-symbol="$" currency-symbol-position="left" thousand-separator=","decimal-separator="."></o-table-column>
         
-          <o-table-column #Quantity attr="Quantity" title="Quantity" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+          <o-table-column #UnitPrice attr="UnitPrice" title="Unitprice " type="currency" editable="no" required="no" currency-symbol="$" currency-symbol-position="left" thousand-separator=","decimal-separator="."></o-table-column>
         
-          <o-table-column #Discount attr="Discount" title="Discount" editable="no" required="no" content-align="left"></o-table-column>
+          <o-table-column attr="ProductId" title="Product">
+    <o-table-cell-renderer-service attr="ProductId" 
+        service="Product" entity="ProductType" columns="Id;ProductName"
+        parent-keys="Id:ProductId"
+        value-column="ProductName" keys="ProductId"
+        visible-columns="ProductName" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
         
-          <o-table-column #Amount attr="Amount" title="Amount" type="currency" editable="no" required="no" currency-symbol="$" currency-symbol-position="left" thousand-separator=","decimal-separator="."></o-table-column>
+          <o-table-column #Discount attr="Discount" title="Discount " editable="no" required="no" content-align="left"></o-table-column>
         
-          <o-date-input #ShippedDate attr="ShippedDate" type="timestamp" label="ShippedDate" editable="no" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+          <o-table-column #Id attr="Id" title="Id* " type="integer" editable="no" required="no" content-align="center"></o-table-column>
+        
+          <o-table-column #Quantity attr="Quantity" title="Quantity " type="integer" editable="no" required="no" content-align="center"></o-table-column>
         
         <o-table-paginator page-size-options="25;50;100"></o-table-paginator>
       </o-table>

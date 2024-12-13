@@ -1,6 +1,5 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
-import { OFormComponent, OntimizeService } from 'ontimize-web-ngx';
-import { PieChartConfiguration } from 'ontimize-web-ngx-charts';
+import { Injector, ViewChild, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { OFormComponent, OntimizeService, OListPickerComponent, OTableComponent, ORealPipe, ONIFInputComponent } from 'ontimize-web-ngx';
 
 
 @Component({
@@ -8,20 +7,13 @@ import { PieChartConfiguration } from 'ontimize-web-ngx-charts';
   templateUrl: './Order-detail.component.html',
   styleUrls: ['./Order-detail.component.scss']
 })
-export class OrderDetailComponent implements OnInit {
+export class OrderDetailComponent implements OnInit  {
   protected service: OntimizeService;
 
   @ViewChild('oDetailForm') form: OFormComponent;
-
-  chartParameters: PieChartConfiguration;
-
+  
   constructor(protected injector: Injector) {
     this.service = this.injector.get(OntimizeService);
-    this.chartParameters = new PieChartConfiguration();
-    this.chartParameters.showLabels = true;
-    this.chartParameters.showLeyend = false;
-    this.chartParameters.labelsOutside = true;
-    this.chartParameters.showTooltip = true;
   }
 
   ngOnInit() {
