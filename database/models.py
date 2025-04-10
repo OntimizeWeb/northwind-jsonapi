@@ -1,6 +1,6 @@
 # coding: utf-8
 from sqlalchemy import DECIMAL, DateTime  # API Logic Server GenAI assist
-from sqlalchemy import Boolean, Column, DECIMAL, Date, Double, ForeignKey, ForeignKeyConstraint, Integer, String, Table, Text, text
+from sqlalchemy import Boolean, Column, DECIMAL, Date, Double, ForeignKey, ForeignKeyConstraint, Integer, LargeBinary, String, Table, Text, text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -10,19 +10,13 @@ from sqlalchemy.ext.declarative import declarative_base
 # Alter this file per your database maintenance policy
 #    See https://apilogicserver.github.io/Docs/Project-Rebuild/#rebuilding
 #
-# Created:  August 27, 2024 12:28:17
-# Database: sqlite:///c:\\work\\apilogic\\northwind.retool\\database\\db.sqlite
+# Created:  April 08, 2025 07:05:14
+# Database: sqlite:///C:\work\apilogic\northwind.retool\database\db.sqlite
 # Dialect:  sqlite
 #
 # mypy: ignore-errors
-#
-# Sample Database (Northwind) -- https://apilogicserver.github.io/Docs/Sample-Database/
-#
-#   Search:
-#     manual  - illustrates you can make manual changes to models.py
-#     example - more complex cases (explore in database/db_debug/db_debug.py)
 ########################################################################################################################
- 
+
 from database.system.SAFRSBaseX import SAFRSBaseX
 from flask_login import UserMixin
 import safrs, flask_sqlalchemy
@@ -33,7 +27,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.sql.sqltypes import NullType
 from typing import List
 
-db = SQLAlchemy() 
+db = SQLAlchemy()
 Base = declarative_base()  # type: flask_sqlalchemy.model.DefaultMeta
 metadata = Base.metadata
 
@@ -50,7 +44,7 @@ class Category(SAFRSBaseX, Base):
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
-    CategoryName = Column('CategoryName_ColumnName', String(8000))  # manual fix - alias
+    CategoryName_ColumnName = Column(String(8000))
     Description = Column(String(8000))
     Client_id = Column(Integer)
 
@@ -148,8 +142,7 @@ class Department(SAFRSBaseX, Base):
     DepartmentName = Column(String(100))
     SecurityLevel = Column(Integer, server_default=text("0"))
 
-    # parent relationships (access parent) -- example: self-referential
-    # .. https://docs.sqlalchemy.org/en/20/orm/self_referential.html
+    # parent relationships (access parent)
     Department : Mapped["Department"] = relationship(remote_side=[Id], back_populates=("DepartmentList"))
 
     # child relationships (access children)
@@ -184,6 +177,35 @@ class Location(SAFRSBaseX, Base):
 
     # child relationships (access children)
     OrderList : Mapped[List["Order"]] = relationship(back_populates="Location")
+
+    @jsonapi_attr
+    def _check_sum_(self):  # type: ignore [no-redef]
+        return None if isinstance(self, flask_sqlalchemy.model.DefaultMeta) \
+            else self._check_sum_property if hasattr(self,"_check_sum_property") \
+                else None  # property does not exist during initialization
+
+    @_check_sum_.setter
+    def _check_sum_(self, value):  # type: ignore [no-redef]
+        self._check_sum_property = value
+
+    S_CheckSum = _check_sum_
+
+
+class Preference(SAFRSBaseX, Base):
+    __tablename__ = 'Preference'
+    _s_collection_name = 'Preference'  # type: ignore
+    __bind_key__ = 'None'
+
+    PREFERENCEID = Column(Integer, primary_key=True)
+    PREFERENCENAME = Column(Text, nullable=False)
+    PREFERENCEDESCRIPTION = Column(Text)
+    PREFERENCEPREFERENCES = Column(Text)
+    PREFERENCEENTITY = Column(Text)
+    PREFERENCETYPE = Column(Integer)
+
+    # parent relationships (access parent)
+
+    # child relationships (access children)
 
     @jsonapi_attr
     def _check_sum_(self):  # type: ignore [no-redef]
@@ -264,6 +286,38 @@ class Region(SAFRSBaseX, Base):
     # parent relationships (access parent)
 
     # child relationships (access children)
+
+    @jsonapi_attr
+    def _check_sum_(self):  # type: ignore [no-redef]
+        return None if isinstance(self, flask_sqlalchemy.model.DefaultMeta) \
+            else self._check_sum_property if hasattr(self,"_check_sum_property") \
+                else None  # property does not exist during initialization
+
+    @_check_sum_.setter
+    def _check_sum_(self, value):  # type: ignore [no-redef]
+        self._check_sum_property = value
+
+    S_CheckSum = _check_sum_
+
+
+class Report(SAFRSBaseX, Base):
+    __tablename__ = 'Report'
+    _s_collection_name = 'Report'  # type: ignore
+    __bind_key__ = 'None'
+
+    REPORTUUID = Column(Text, primary_key=True)
+    REPORTTYPE = Column(Text, nullable=False)
+    REPORTDESCRIPTION = Column(Text)
+    REPORTFILENAME = Column(Text, nullable=False)
+    REPORTZIP = Column(LargeBinary)
+    VALUE_CLASS = Column(LargeBinary)
+    REPORTNAME = Column(Text)
+    allow_client_generated_ids = True
+
+    # parent relationships (access parent)
+
+    # child relationships (access children)
+    ReportParameterList : Mapped[List["ReportParameter"]] = relationship(back_populates="Report")
 
     @jsonapi_attr
     def _check_sum_(self):  # type: ignore [no-redef]
@@ -447,8 +501,7 @@ class Employee(SAFRSBaseX, Base):
     UnionId = Column(ForeignKey('Union.Id'))
     Dues : DECIMAL = Column(DECIMAL)
 
-    # parent relationships (access parent) -- example: multiple join paths
-    # .. https://docs.sqlalchemy.org/en/20/orm/join_conditions.html#handling-multiple-join-paths
+    # parent relationships (access parent)
     OnLoanDepartment : Mapped["Department"] = relationship(foreign_keys='[Employee.OnLoanDepartmentId]', back_populates=("EmployeeList"))
     Union : Mapped["Union"] = relationship(back_populates=("EmployeeList"))
     WorksForDepartment : Mapped["Department"] = relationship(foreign_keys='[Employee.WorksForDepartmentId]', back_populates=("WorksForEmployeeList"))
@@ -457,6 +510,36 @@ class Employee(SAFRSBaseX, Base):
     EmployeeAuditList : Mapped[List["EmployeeAudit"]] = relationship(back_populates="Employee")
     EmployeeTerritoryList : Mapped[List["EmployeeTerritory"]] = relationship(back_populates="Employee")
     OrderList : Mapped[List["Order"]] = relationship(back_populates="Employee")
+
+    @jsonapi_attr
+    def _check_sum_(self):  # type: ignore [no-redef]
+        return None if isinstance(self, flask_sqlalchemy.model.DefaultMeta) \
+            else self._check_sum_property if hasattr(self,"_check_sum_property") \
+                else None  # property does not exist during initialization
+
+    @_check_sum_.setter
+    def _check_sum_(self, value):  # type: ignore [no-redef]
+        self._check_sum_property = value
+
+    S_CheckSum = _check_sum_
+
+
+class ReportParameter(SAFRSBaseX, Base):
+    __tablename__ = 'ReportParameter'
+    _s_collection_name = 'ReportParameter'  # type: ignore
+    __bind_key__ = 'None'
+
+    REPORTPARAMETERID = Column(Integer, primary_key=True)
+    REPORTPARAMETERNAME = Column(Text)
+    REPORTPARAMETERDESCRIPTION = Column(Text)
+    REPORTPARAMETERNESTEDTYPE = Column(Text)
+    REPORTPARAMETERVALUECLASS = Column(Text)
+    REPORTUUID = Column(ForeignKey('Report.REPORTUUID'))
+
+    # parent relationships (access parent)
+    Report : Mapped["Report"] = relationship(back_populates=("ReportParameterList"))
+
+    # child relationships (access children)
 
     @jsonapi_attr
     def _check_sum_(self):  # type: ignore [no-redef]

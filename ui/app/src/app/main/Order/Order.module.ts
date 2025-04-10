@@ -1,9 +1,10 @@
-import {CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { OntimizeWebModule } from 'ontimize-web-ngx';
-import { SharedModule } from '../../shared/shared.module';
-import  {ORDER_MODULE_DECLARATIONS, OrderRoutingModule} from  './Order-routing.module';
 import { OChartModule } from 'ontimize-web-ngx-charts';
+
+import { SharedModule } from '../../shared/shared.module';
+import { ORDER_MODULE_DECLARATIONS, OrderRoutingModule } from './Order-routing.module';
 
 @NgModule({
 
