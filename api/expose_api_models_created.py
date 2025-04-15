@@ -12,16 +12,16 @@ app_logger = logging.getLogger(__name__)
 app_logger.debug("\napi/expose_api_models.py - endpoint for each table")
 
 
-def expose_models(api, method_decorators = []):
+def expose_models(api, method_decorators = []): 
     """
-        Declare API - on existing SAFRSAPI to expose each model - API automation
-        - Including get (filtering, pagination, related data access)
-        - And post/patch/update (including logic enforcement)
+        Declare API - on existing SAFRSAPI to expose each model - API automation 
+        - Including get (filtering, pagination, related data access) 
+        - And post/patch/update (including logic enforcement) 
 
-        Invoked at server startup (api_logic_server_run)
+        Invoked at server startup (api_logic_server_run) 
 
-        You typically do not customize this file
-        - See https://apilogicserver.github.io/Docs/Tutorial/#customize-and-debug
+        You typically do not customize this file 
+        - See https://apilogicserver.github.io/Docs/Tutorial/#customize-and-debug 
     """
     api.expose_object(database.models.Category, method_decorators= method_decorators)
     api.expose_object(database.models.Customer, method_decorators= method_decorators)
@@ -35,8 +35,8 @@ def expose_models(api, method_decorators = []):
     api.expose_object(database.models.Location, method_decorators= method_decorators)
     api.expose_object(database.models.Order, method_decorators= method_decorators)
     api.expose_object(database.models.OrderDetail, method_decorators= method_decorators)
-    api.expose_object(database.models.Preference, method_decorators= method_decorators)
     api.expose_object(database.models.Product, method_decorators= method_decorators)
+    api.expose_object(database.models.Preference, method_decorators= method_decorators)
     api.expose_object(database.models.Region, method_decorators= method_decorators)
     api.expose_object(database.models.Report, method_decorators= method_decorators)
     api.expose_object(database.models.ReportParameter, method_decorators= method_decorators)
