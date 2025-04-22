@@ -25,7 +25,7 @@ def get_sra_directory(args: Args) -> str:
     
     This enables the sra code to be re-used, reducing app size 32MB -> 2.5 MB
     """
-    directory = 'ui/safrs-react-admin'  # local project sra typical API Logic Server path (index.yaml)
+    directory = os.environ.get("APILOGICPROJECT_SRA", 'ui/safrs-react-admin')  # local project sra typical API Logic Server path (index.yaml)
     if Path(directory).joinpath('robots.txt').is_file():
         admin_logger.debug("return_spa - using local directory")
     else:        # else use installed sra - from venv, or, for dev, in APILOGICSERVER_HOME
@@ -140,7 +140,7 @@ def admin_events(flask_app: Flask, args: Args, validation_error: ValidationError
                 if "keycloak" in provider_name:
                     s = (f'\n'
                         f'  keycloak:\n'
-                        f'    url: {args.keycloak_base_url}\n'
+                        f'    url: {args.keycloak_base}\n'
                         f'    realm: {args.keycloak_realm}\n'
                         f'    clientId: {args.keycloak_client_id}\n'
                     )   
@@ -148,6 +148,8 @@ def admin_events(flask_app: Flask, args: Args, validation_error: ValidationError
                 elif "sql" in provider_name:
                     sql_auth_config = f'\n  endpoint: {args.http_scheme}://{args.swagger_host}:{args.swagger_port}/{args.api_prefix[1:]}/auth/login\n'
                     content = content.replace("'{system-default}'", sql_auth_config)
+                elif getattr(Config.SECURITY_PROVIDER, 'auth_config', None):
+                    content = content.replace("'{system-default}'", Config.SECURITY_PROVIDER.auth_config)
                 else:
                     sys.exit(f"ERROR[admin_loader]: unknown security type: {Config.SECURITY_PROVIDER}")         
 
