@@ -37,7 +37,5 @@ export const CONFIG: Config = {
   }
 
   
-  ,startSessionPath: '/auth/login',
-  
 
 };

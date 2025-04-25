@@ -149,9 +149,9 @@ application:
                 columns: LastName,OnLoanDepartmentId,WorksForDepartmentId,Salary,ProperSalary,EmployeeType,Dues,FirstName,Id,Title,TitleOfCourtesy,BirthDate,HireDate,Address,City,Region,PostalCode,Country,HomePhone,Extension,ReportsTo,PhotoPath,Notes
                 include_children: true
                 page_name: home
-                template_name: home_template.html
+                template_name: grid_template.html
                 title: Employee
-                typescript_name: home_template.jinja
+                typescript_name: grid_home_template.jinja
                 visible_columns: LastName,OnLoanDepartmentId,WorksForDepartmentId,Salary,ProperSalary,EmployeeType,Dues,FirstName,Id,Title,TitleOfCourtesy,BirthDate,HireDate,Address,City,Region,PostalCode,Country,HomePhone,Extension,ReportsTo,PhotoPath,Notes
               new:
                 columns: LastName,OnLoanDepartmentId,WorksForDepartmentId,Salary,ProperSalary,EmployeeType,Dues,FirstName,Id,Title,TitleOfCourtesy,BirthDate,HireDate,Address,City,Region,PostalCode,Country,HomePhone,Extension,ReportsTo,PhotoPath,Notes
@@ -782,6 +782,8 @@ entities:
       <h1>Derived Attributes</h1> <span style="font-family:'Courier New'">ProperSalary</span>
       is not defined in the database.<br> See <span style="font-family:'Courier New'">database/customize_models.py</span>.<br>
     label: Employee
+    grid_items: 'EmployeeType, LastName,FirstName,Address, Country, HomePhone'
+    grid_image: PhotoPath
     primary_key:
     - Id
     tab_groups:

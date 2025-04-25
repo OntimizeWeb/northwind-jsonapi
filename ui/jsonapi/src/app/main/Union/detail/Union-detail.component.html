@@ -31,11 +31,11 @@
         entity="Employee" 
         keys="Id"
         parent-keys="UnionId:Id"
-        columns="LastName;OnLoanDepartmentId;WorksForDepartmentId;Salary;Email;ProperSalary;EmployeeType;Dues;FirstName;Id;Title;TitleOfCourtesy;BirthDate;HireDate;Address;City;Region;PostalCode;Country;HomePhone;Extension;ReportsTo;PhotoPath;Notes"  
+        columns="LastName;OnLoanDepartmentId;WorksForDepartmentId;Salary;ProperSalary;EmployeeType;Dues;FirstName;Id;Title;TitleOfCourtesy;BirthDate;HireDate;Address;City;Region;PostalCode;Country;HomePhone;Extension;ReportsTo;PhotoPath;Notes"  
         horizontal-scroll="yes"
         detail-form-route="Employee" 
         edit-form-route="Employee"
-        visible-columns="LastName;OnLoanDepartmentId;WorksForDepartmentId;Salary;Email;ProperSalary;EmployeeType;Dues;FirstName;Id;Title;TitleOfCourtesy;BirthDate;HireDate;Address;City;Region;PostalCode;Country;HomePhone;Extension;ReportsTo;PhotoPath;Notes"  
+        visible-columns="LastName;OnLoanDepartmentId;WorksForDepartmentId;Salary;ProperSalary;EmployeeType;Dues;FirstName;Id;Title;TitleOfCourtesy;BirthDate;HireDate;Address;City;Region;PostalCode;Country;HomePhone;Extension;ReportsTo;PhotoPath;Notes"  
         sort-columns="LastName" 
         query-rows="25" 
         quick-filter="yes"
@@ -73,8 +73,6 @@
         
           <o-table-column #Salary attr="Salary" title="Salary" type="real" min-decimal-digits="2" max-decimal-digits="4" min="0" max="1000000.0000" content-align="center"></o-table-column>
         
-          <o-table-column #Email attr="Email" title="Email" editable="no" required="no" content-align="left"></o-table-column>
-        
           <o-table-column #ProperSalary attr="ProperSalary" title="ProperSalary" type="real" min-decimal-digits="2" max-decimal-digits="4" min="0" max="1000000.0000" content-align="center"></o-table-column>
         
           <o-table-column #EmployeeType attr="EmployeeType" title="EmployeeType" editable="no" required="no" content-align="left"></o-table-column>
@@ -89,9 +87,9 @@
         
           <o-table-column #TitleOfCourtesy attr="TitleOfCourtesy" title="TitleOfCourtesy" editable="no" required="no" content-align="left"></o-table-column>
         
-          <o-table-column #BirthDate attr="BirthDate" title="BirthDate" type="VARCHAR" editable="no" required="no" ></o-table-column>
+          <o-table-column #BirthDate attr="BirthDate" title="BirthDate" type="DATE" editable="no" required="no" ></o-table-column>
         
-          <o-table-column #HireDate attr="HireDate" title="HireDate" type="VARCHAR" editable="no" required="no" ></o-table-column>
+          <o-table-column #HireDate attr="HireDate" title="HireDate" type="DATE" editable="no" required="no" ></o-table-column>
         
           <o-table-column #Address attr="Address" title="Address" editable="no" required="no" content-align="left"></o-table-column>
         
