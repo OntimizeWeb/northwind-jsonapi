@@ -18,14 +18,20 @@ app_logger = logging.getLogger(__name__)
 
 db = safrs.DB 
 session = db.session 
-def export_pdf(api_clz, request, entity, queryParm, columns, columnTitles, attributes) -> any:
+
+def export_pdf_report(api_clz, rows, entity, queryParm, columns, columnTitles, attributes) -> any:
+    return export_pdf(api_clz, None, entity, queryParm, columns, columnTitles, attributes, rows)
+def export_pdf(api_clz, request, entity, queryParm, columns, columnTitles, attributes, rows: dict = None) -> any:
     filter = None #queryParm,get("filter")
     list_of_columns = []
     for col in columns:
         for attr in attributes:
-            if col == attr["name"]:
-                list_of_columns.append(attr['name'])
-    rows = get_rows(api_clz,request, list_of_columns, filter)
+            if col == getattr(attr,'name'):
+                list_of_columns.append(getattr(attr,'name'))
+    if request is not None:
+        rows = get_rows(api_clz,request, list_of_columns, filter)
+    elif rows is None:
+        raise ValueError("rows cannot be None if request is None")
     
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))
@@ -58,7 +64,7 @@ def export_pdf(api_clz, request, entity, queryParm, columns, columnTitles, attri
     for row in rows['data']:
         row_data = []
         for col in list_of_columns:
-            row_data.append(row[col])
+            row_data.append(getattr(row,col))
         table_data.append(row_data)
 
     # Create table

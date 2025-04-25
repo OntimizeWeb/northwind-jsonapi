@@ -1,5 +1,5 @@
 import { Injector, ViewChild, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { OFormComponent, OntimizeService, OListPickerComponent, OTableComponent, ORealPipe, ONIFInputComponent } from 'ontimize-web-ngx';
+import { OFormComponent, OntimizeService } from 'ontimize-web-ngx';
 
 
 @Component({

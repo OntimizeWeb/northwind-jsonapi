@@ -113,6 +113,7 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         return gen_report(api_clz, request, _project_dir, payload, attributes)
     @app.route("/api/export/csv", methods=['POST','OPTIONS'])
     @app.route("/api/export/pdf", methods=['POST','OPTIONS'])
+    @app.route("/api/Customer/dynamicjasper/report", methods=['POST','OPTIONS'])
     @app.route("/ontimizeweb/services/rest/export/pdf", methods=['POST','OPTIONS'])
     @app.route("/ontimizeweb/services/rest/export/csv", methods=['POST','OPTIONS'])
     @admin_required()

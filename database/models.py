@@ -3,6 +3,7 @@ from sqlalchemy import DECIMAL, DateTime  # API Logic Server GenAI assist
 from sqlalchemy import Boolean, Column, DECIMAL, Date, Double, ForeignKey, ForeignKeyConstraint, Integer, LargeBinary, String, Table, Text, text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from safrs import jsonapi_rpc, SAFRSAPI
 
 ########################################################################################################################
 # Classes describing database for SqlAlchemy ORM, initially created by schema introspection.
@@ -90,6 +91,26 @@ class Customer(Base):
     OrderList : Mapped[List["Order"]] = relationship(back_populates="Customer")
 
     
+    @classmethod
+    @jsonapi_rpc(http_methods=['POST', 'OPTIONS'])
+    def dyanmicjasper(self, *args, **kwargs):
+        """
+        Example of a report gen
+        """
+        db = safrs.DB
+        session = db.session   
+        
+        from api.system.gen_pdf_report import export_pdf_report
+        api_clz = Customer()
+        raw_rows = session.query(Customer).all()
+        rows = {"data": raw_rows}
+        entity = 'Customer'
+        queryParm = {}
+        columns = ['Id', 'CompanyName', 'ContactName', 'ContactTitle', 'Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone', 'Fax']    
+        columnTitles = ['Id', 'Company Name', 'Contact Name', 'Contact Title', 'Address', 'City', 'Region', 'Postal Code', 'Country', 'Phone', 'Fax']   
+        attributes = api_clz._s_columns
+        return export_pdf_report(api_clz, rows, entity, queryParm, columns, columnTitles, attributes)
+
 
 
 class CustomerDemographic(Base):

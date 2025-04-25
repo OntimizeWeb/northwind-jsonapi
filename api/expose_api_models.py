@@ -12,6 +12,7 @@ database = __import__('database')
 app_logger = logging.getLogger(__name__)
 app_logger.debug("api/expose_api_models.py - endpoint for each table")
 
+
 def add_check_sum(cls):
     """
     Checksum decorator for each model

@@ -1,7 +1,7 @@
-<o-form #EmployeeForm attr="Employee_form_insert" service="Employee" entity="Employee" 
+<o-form #EmployeeForm attr="Employee_form_insert" service="Employee" entity="Employee"
 keys="Id" fxLayout="column" show-header="yes" header-actions="I"
 horizontal-scroll="yes"
-after-insert-mode="new" class="standalone-form-container" (onInsertMode)="onInsertMode()">
+after-insert-mode="new" class="standalone-form-container" >
 
 <o-row attr="row1" layout-align="start stretch">
   <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
@@ -47,6 +47,8 @@ after-insert-mode="new" class="standalone-form-container" (onInsertMode)="onInse
 </o-list-picker>
       
         <o-real-input #Salary attr="Salary" label="Salary" min-decimal-digits="2" max-decimal-digits="4" min="0" max="1000000000" fxFlex="20%" class="form-field"></o-real-input>
+      
+        <o-text-input #Email attr="Email" label="Email" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
         <o-real-input #ProperSalary attr="ProperSalary" label="ProperSalary" min-decimal-digits="2" max-decimal-digits="4" min="0" max="1000000000" fxFlex="20%" class="form-field"></o-real-input>
       

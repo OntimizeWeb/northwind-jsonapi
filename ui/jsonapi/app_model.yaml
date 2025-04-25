@@ -505,10 +505,10 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Description
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Client_id
       template: integer
       type: INTEGER
@@ -539,13 +539,13 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - label: ' Company Name*'
       name: CompanyName
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - info: derived as sum(Order.AmountTotal where ShippedDate is None)
       name: Balance
       type: DECIMAL
@@ -567,31 +567,31 @@ entities:
       type: INTEGER
     - name: ContactName
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: ContactTitle
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Address
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: City
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Region
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: PostalCode
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Country
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Phone
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Fax
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     favorite: CompanyName
     hidden: {}
     info_list: <h1>List Pages</h1> In this <a target="_blank" href="https://apilogicserver.github.io/Docs/Sample-Database/">Northwind
@@ -635,10 +635,10 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: CustomerDesc
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     favorite: Id
     hidden: {}
     label: CustomerDemographic
@@ -700,7 +700,7 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: OnLoanDepartmentId
       template: integer
       type: INTEGER
@@ -720,43 +720,43 @@ entities:
       type: DECIMAL
     - name: FirstName
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Id
       template: integer
       type: INTEGER
     - name: Title
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: TitleOfCourtesy
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: BirthDate
       template: text
-      type: VARCHAR(8000)
+      type: DATE
     - name: HireDate
       template: text
-      type: VARCHAR(8000)
+      type: DATE
     - name: Address
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: City
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Region
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: PostalCode
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Country
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: HomePhone
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Extension
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: ReportsTo
       template: integer
       type: INTEGER
@@ -869,10 +869,10 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: TerritoryId
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: EmployeeId
       required: true
       template: integer
@@ -937,7 +937,7 @@ entities:
       name: ShippedDate
       show_when: isInserting == false
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: OrderDate
       type: DATE
     - info: derived as sum(OrderDetail.Amount)
@@ -970,31 +970,31 @@ entities:
     - name: CustomerId
       required: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - label: ' Ship Name*'
       name: ShipName
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: ShipVia
       template: integer
       type: INTEGER
     - name: ShipAddress
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: ShipCity
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: ShipRegion
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: ShipZip
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: ShipCountry
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     favorite: Id
     hidden: {}
     info_show: <h1>Tour</h1> <h3>Automatic Joins</h3> <ul> <li> Observe the Product
@@ -1074,7 +1074,7 @@ entities:
       name: ShippedDate
       show_when: isInserting == false
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     favorite: Id
     hidden: {}
     label: OrderDetail
@@ -1099,10 +1099,10 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: QuantityPerUnit
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: UnitPrice
       required: true
       type: DECIMAL
@@ -1157,7 +1157,7 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Id
       template: integer
       type: INTEGER
@@ -1174,10 +1174,10 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Phone
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Id
       template: integer
       type: INTEGER
@@ -1194,37 +1194,37 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: ContactName
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: ContactTitle
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Address
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: City
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Region
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: PostalCode
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Country
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Phone
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Fax
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: HomePage
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Id
       template: integer
       type: INTEGER
@@ -1241,10 +1241,10 @@ entities:
       search: true
       sort: true
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: Id
       template: text
-      type: VARCHAR(8000)
+      type: VARCHAR
     - name: RegionId
       required: true
       template: integer
