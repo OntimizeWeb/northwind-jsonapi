@@ -59,9 +59,9 @@ application:
                 columns: Id,CompanyName,Balance,CreditLimit,OrderCount,UnpaidOrderCount,Client_id,ContactName,ContactTitle,Address,City,Region,PostalCode,Country,Phone,Fax
                 include_children: true
                 page_name: home
-                template_name: home_template.html
+                template_name: home_tree_template.html
                 title: Customer
-                typescript_name: home_template.jinja
+                typescript_name: tree_routing.jinja
                 visible_columns: Id,CompanyName,Balance,CreditLimit,OrderCount,UnpaidOrderCount,Client_id,ContactName,ContactTitle,Address,City,Region,PostalCode,Country,Phone,Fax
               new:
                 columns: Id,CompanyName,Balance,CreditLimit,OrderCount,UnpaidOrderCount,Client_id,ContactName,ContactTitle,Address,City,Region,PostalCode,Country,Phone,Fax
@@ -1310,7 +1310,7 @@ settings:
     min_decimal_digits: '2'
     mode: tab
     pick_style: list
-    serviceType: OntimizeEE
+    serviceType: JSONAPI
     startSessionPath: /auth/login
     style: light
     thousand_separator: ','

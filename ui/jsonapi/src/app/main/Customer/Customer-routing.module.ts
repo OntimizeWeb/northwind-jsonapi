@@ -5,15 +5,16 @@ import { CustomerNewComponent } from './new/Customer-new.component';
 import { CustomerDetailComponent } from './detail/Customer-detail.component';
 
 const routes: Routes = [
-  {path: '', component: CustomerHomeComponent},
-  { path: 'new', component: CustomerNewComponent },
-  { path: ':Id', component: CustomerDetailComponent,
-    data: {
-      oPermission: {
-        permissionId: 'Customer-detail-permissions'
-      }
-    }
-  },{
+  {path: '', component: CustomerHomeComponent,
+    children: [
+      { path: 'new', component: CustomerNewComponent },
+      { path: ':Id', component: CustomerDetailComponent,
+        data: {
+          oPermission: {
+            permissionId: 'Customer-detail-permissions'
+          }
+        }
+      },{
     path: ':CustomerId/Order', loadChildren: () => import('../Order/Order.module').then(m => m.OrderModule),
     data: {
         oPermission: {
@@ -21,6 +22,7 @@ const routes: Routes = [
         }
     }
 }
+  ]}
 ];
 
 export const CUSTOMER_MODULE_DECLARATIONS = [

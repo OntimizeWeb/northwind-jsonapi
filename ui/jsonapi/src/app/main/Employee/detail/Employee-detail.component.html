@@ -70,9 +70,9 @@
       
       <o-text-input #TitleOfCourtesy attr="TitleOfCourtesy" label="TitleOfCourtesy" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-      <o-date-input #BirthDate attr="BirthDate" type="date" label="BirthDate" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+      <o-date-input #BirthDate attr="BirthDate" value-type="string" label="BirthDate" enabled="yes" required="no" format="YYYY-MM-DD" fxFlex="20%" class="form-field"></o-date-input>
       
-      <o-date-input #HireDate attr="HireDate" type="date" label="HireDate" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+      <o-date-input #HireDate attr="HireDate" value-type="string" label="HireDate" enabled="yes" required="no" format="YYYY-MM-DD" fxFlex="20%" class="form-field"></o-date-input>
       
       <o-text-input #Address attr="Address" label="Address" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
@@ -92,7 +92,7 @@
       
       <o-image #PhotoPath attr="PhotoPath" type="image" auto-fit="true" enabled="true" read-only="false" show-controls="true"  full-screen-button="false" empty-image="./assets/images/no-image.png"></o-image>
       
-      <o-textarea-input #Notes attr="Notes"  label="Notes" enabled="true" read-only="false"></o-textarea-input>
+      <o-textarea-input #Notes attr="Notes"  label="Notes" enabled="true" read-only="false" fxFlex="50%"></o-textarea-input>
       
     </div>
   </o-row>

@@ -35,9 +35,9 @@
         separator=" - " width="680px" class="form-field">
 </o-list-picker>
       
-      <o-date-input #ShippedDate attr="ShippedDate" type="timestamp" label="ShippedDate" editable="no" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+      <o-date-input #ShippedDate attr="ShippedDate" type="string" label="ShippedDate" editable="no" required="no" format="YYYY-MM-DD" fxFlex="20%" class="form-field"></o-date-input>
       
-      <o-date-input #OrderDate attr="OrderDate" type="date" label="OrderDate" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+      <o-date-input #OrderDate attr="OrderDate" type="string" label="OrderDate" enabled="yes" required="no" format="YYYY-MM-DD" fxFlex="20%" class="form-field"></o-date-input>
       
       <o-currency-input #AmountTotal attr="AmountTotal" title="AmountTotal" type="currency" editable="no" required="no" currency-symbol="$" currency-symbol-position="left" thousand-separator="," decimal-separator="."></o-currency-input>
       

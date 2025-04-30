@@ -27,9 +27,9 @@ after-insert-mode="new" class="standalone-form-container" >
         separator=" - " width="680px" class="form-field">
 </o-list-picker>
       
-        <o-date-input #ShippedDate attr="ShippedDate" type="timestamp" label="ShippedDate" editable="no" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+        <o-date-input #ShippedDate attr="ShippedDate" value-type="string" label="ShippedDate" editable="no" required="no" format="YYYY-MM-DD hh:mm:ss" fxFlex="20%" class="form-field"></o-date-input>
       
-        <o-date-input #OrderDate attr="OrderDate" type="date" label="OrderDate" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+        <o-date-input #OrderDate attr="OrderDate" value-type="string" label="OrderDate" enabled="yes" required="no" format="YYYY-MM-DD" fxFlex="20%" class="form-field"></o-date-input>
       
         <o-currency-input #AmountTotal attr="AmountTotal" title="AmountTotal" type="currency" editable="no" required="no" currency-symbol="$" currency-symbol-position="left" thousand-separator="," decimal-separator="."></o-currency-input>
       
@@ -45,7 +45,7 @@ after-insert-mode="new" class="standalone-form-container" >
       
         <o-text-input #City attr="City" label="City" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-        <o-date-input #RequiredDate attr="RequiredDate" type="date" label="RequiredDate" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+        <o-date-input #RequiredDate attr="RequiredDate" value-type="string" label="RequiredDate" enabled="yes" required="no" format="YYYY-MM-DD" fxFlex="20%" class="form-field"></o-date-input>
       
         <o-list-picker 
         attr="CustomerId"

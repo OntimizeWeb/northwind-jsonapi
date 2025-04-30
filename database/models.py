@@ -39,6 +39,7 @@ from sqlalchemy.dialects.sqlite import *
 
 if os.getenv('APILOGICPROJECT_NO_FLASK') is None or os.getenv('APILOGICPROJECT_NO_FLASK') == 'None':
     Base = SAFRSBaseX   # enables rules to be used outside of Flask, e.g., test data loading
+    
 else:
     Base = TestBase     # ensure proper types, so rules work for data loading
     print('*** Models.py Using TestBase ***')
@@ -48,7 +49,6 @@ else:
 class Category(Base):  # type: ignore
     __tablename__ = 'CategoryTableNameTest'
     _s_collection_name = 'Category'  # type: ignore
-    
 
     Id = Column(Integer, primary_key=True)
     CategoryName = Column('CategoryName_ColumnName', String(8000))  # manual fix - alias
@@ -152,7 +152,8 @@ class Department(Base):
 class Location(Base):
     __tablename__ = 'Location'
     _s_collection_name = 'Location'  # type: ignore
-    
+    _s_pk_delimiter = "|"  # type: ignore
+    delimiter = "|"  # type: ignore
 
     country = Column(String(50), primary_key=True)
     city = Column(String(50), primary_key=True)
