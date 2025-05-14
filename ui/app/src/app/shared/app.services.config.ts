@@ -1,4 +1,4 @@
-export const SERVICE_CONFIG: Object ={ 'Category': { 'path': '/Category' }
+export const SERVICE_CONFIG ={ 'Category': { 'path': '/Category' }
 ,'Customer': { 'path': '/Customer' }
 ,'CustomerDemographic': { 'path': '/CustomerDemographic' }
 ,'Department': { 'path': '/Department' }

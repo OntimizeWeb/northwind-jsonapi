@@ -60,9 +60,9 @@
             
             <o-table-column #TitleOfCourtesy attr="TitleOfCourtesy" title="TitleOfCourtesy" editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-date-input #BirthDate attr="BirthDate" type="timestamp" label="BirthDate" editable="no" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            <o-table-column #BirthDate attr="BirthDate" title="BirthDate" type="VARCHAR(8000)" editable="no" required="no" ></o-table-column>
             
-            <o-date-input #HireDate attr="HireDate" type="timestamp" label="HireDate" editable="no" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            <o-table-column #HireDate attr="HireDate" title="HireDate" type="VARCHAR(8000)" editable="no" required="no" ></o-table-column>
             
             <o-table-column #Address attr="Address" title="Address" editable="no" required="no" content-align="left"></o-table-column>
             
@@ -82,7 +82,7 @@
             
             <o-table-column #PhotoPath attr="PhotoPath" title="PhotoPath" editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-textarea-input #Notes attr="Notes" title="Notes" rows="10" content-align="center"></o-textarea-input>
+            <o-table-column #Notes attr="Notes" title="Notes" type="textarea" editable="no" required="no" ></o-table-column>
             
             <o-table-context-menu></o-table-context-menu>
             <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
