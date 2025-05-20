@@ -1,10 +1,10 @@
-<o-form-layout-manager attr="Territory" mode="tab" title="{{ 'TERRITORY'}}">
+<o-form-layout-manager attr="Territory" mode="tab" title="TERRITORY">
     <div fxFill fxLayout="column" fxLayoutAlign="start">
         <o-table 
             attr="TerritoryTable" 
             service="Territory" 
             entity="Territory" 
-            title="{{ 'TERRITORY'}}"
+            title="TERRITORY"
             keys="Id"
             columns="TerritoryDescription;Id;RegionId" 
             header-actions="R;D"
@@ -22,11 +22,11 @@
             show-title="yes"
             export-button="yes">
             
-            <o-table-column #TerritoryDescription attr="TerritoryDescription" title=" Territory Description*" editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #TerritoryDescription attr="TerritoryDescription" title="Territory Description " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-table-column #Id attr="Id" title="Id" editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #Id attr="Id" title="Id " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-table-column #RegionId attr="RegionId" title="RegionId" type="integer" editable="no" required="yes" content-align="center"></o-table-column>
+            <o-table-column #RegionId attr="RegionId" title="Regionid " type="integer" editable="no" required="yes" content-align="center"></o-table-column>
             
             <o-table-context-menu></o-table-context-menu>
             <o-table-paginator page-size-options="24;48;96"></o-table-paginator>

@@ -23,9 +23,9 @@ def export_pdf(api_clz, request, entity, queryParm, columns, columnTitles, attri
     list_of_columns = []
     for col in columns:
         for attr in attributes:
-            if col == attr["name"]:
+            if col['name'] == attr["name"]:
                 list_of_columns.append(attr['name'])
-    rows = get_rows(api_clz,request, list_of_columns, filter)
+    rows = get_rows(api_clz,request, list_of_columns, filter, {})
     
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))

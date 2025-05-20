@@ -14,11 +14,11 @@
   <o-row attr="row1" layout-align="start stretch">
     <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
       
-      <o-text-input #TerritoryDescription attr="TerritoryDescription" label=" Territory Description*" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      <o-text-input #TerritoryDescription attr="TerritoryDescription" label="Territory Description " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-      <o-text-input #Id attr="Id" label="Id" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      <o-text-input #Id attr="Id" label="Id " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-      <o-integer-input #RegionId attr="RegionId" label="RegionId" type="integer" editable="no" required="yes" ></o-integer-input>
+      <o-integer-input #RegionId attr="RegionId" label="Regionid " type="integer" editable="no" required="yes" ></o-integer-input>
       
     </div>
   </o-row>
@@ -53,16 +53,9 @@
         edition-mode="dblclick" 
         horizontal-scroll="yes" class="fill-form">
         
-          <o-table-column #Id attr="Id" title=" Id*" editable="no" required="no" content-align="left"></o-table-column>
+          <o-table-column #Id attr="Id" title="Id " editable="no" required="no" content-align="left"></o-table-column>
         
-          <o-table-column attr="TerritoryId" title="Territory">
-    <o-table-cell-renderer-service attr="TerritoryId" 
-        service="Territory" entity="TerritoryType" columns="Id;TerritoryDescription"
-        parent-keys="Id:TerritoryId"
-        value-column="TerritoryDescription" keys="TerritoryId"
-        visible-columns="TerritoryDescription" separator=" - " width="680px">
-    </o-table-cell-renderer-service>
-</o-table-column>
+          <o-table-column #TerritoryId attr="TerritoryId" title="Territoryid " editable="no" required="no" content-align="left"></o-table-column>
         
           <o-table-column attr="EmployeeId" title="Employee">
     <o-table-cell-renderer-service attr="EmployeeId" 

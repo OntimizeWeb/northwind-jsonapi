@@ -1,4 +1,4 @@
-<o-form-layout-manager attr="OrderDetail" mode="tab" title="ORDERDETAIL">
+<o-form-layout-manager attr="OrderDetail" mode="dialog" title="ORDERDETAIL">
     <div fxFill fxLayout="column" fxLayoutAlign="start">
         <o-table 
             attr="OrderDetailTable" 
@@ -22,7 +22,7 @@
             show-title="yes"
             export-button="yes">
             
-            <o-date-input #ShippedDate attr="ShippedDate" type="timestamp" label="Shippeddate " editable="no" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            <o-table-column #ShippedDate attr="ShippedDate" title="Shippeddate " type="VARCHAR(8000)" editable="no" required="no" ></o-table-column>
             
             <o-table-column attr="OrderId" title="Order">
     <o-table-cell-renderer-service attr="OrderId" 
@@ -48,7 +48,7 @@
             
             <o-table-column #Discount attr="Discount" title="Discount " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-table-column #Id attr="Id" title="Id* " type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            <o-table-column #Id attr="Id" title="Id " type="integer" editable="no" required="no" content-align="center"></o-table-column>
             
             <o-table-column #Quantity attr="Quantity" title="Quantity " type="integer" editable="no" required="no" content-align="center"></o-table-column>
             

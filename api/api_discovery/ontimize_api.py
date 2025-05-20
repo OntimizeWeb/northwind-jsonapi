@@ -99,18 +99,32 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
 
 
     def _gen_report(request) -> any:
-        payload = json.loads(request.data)
-
-        if len(payload) == 3:
+        if request.method == "OPTIONS":
+            return jsonify(success=True)
+        payload = json.loads(request.data) if request.data != b'' else {}
+        entity = payload.get("entity") or payload.get("dao")
+        if not entity:
             return jsonify({})
-
-        entity = payload["entity"]
+            
         resource = find_model(entity)
         api_clz = resource["model"]
         resources = getMetaData(api_clz.__name__)
         attributes = resources["resources"][api_clz.__name__]["attributes"]
-
+        payload["entity"] = entity
         return gen_report(api_clz, request, _project_dir, payload, attributes)
+    
+    @app.route('/api/<path:path>/dynamicjasper/report', methods=['POST','OPTIONS'])
+    @cross_origin(supports_credentials=True)
+    @admin_required()
+    def dynamicjasper(path):
+        if 'dynamicjasper' in request.path and request.method == 'POST':
+            return _gen_report(request)
+        else:
+            return app.dispatch_request()
+
+        
+        
+        
     @app.route("/api/export/csv", methods=['POST','OPTIONS'])
     @app.route("/api/export/pdf", methods=['POST','OPTIONS'])
     @app.route("/ontimizeweb/services/rest/export/pdf", methods=['POST','OPTIONS'])
@@ -122,13 +136,6 @@ def add_service(app, api, project_dir, swagger_host: str, PORT: str, method_deco
         #    return jsonify(success=True)
         return gen_export(request)
 
-    @app.route("/api/dynamicjasper", methods=['POST','OPTIONS'])
-    @app.route("/ontimizeweb/services/rest/dynamicjasper", methods=['POST','OPTIONS'])
-    @admin_required()
-    def dynamicjasper():
-        if request.method == "OPTIONS":
-            return jsonify(success=True)
-        return _gen_report(request)
 
     @app.route("/api/bundle", methods=['POST','OPTIONS'])
     @app.route("/ontimizeweb/services/rest/bundle", methods=['POST','OPTIONS'])

@@ -18,7 +18,7 @@
       
       <o-integer-input #UnitsShipped attr="UnitsShipped" label="Unitsshipped " type="integer" editable="no" required="no" ></o-integer-input>
       
-      <o-text-input #ProductName attr="ProductName" label="Product Name* " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      <o-text-input #ProductName attr="ProductName" label="Product Name " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
       <o-integer-input #UnitsOnOrder attr="UnitsOnOrder" label="Unitsonorder " type="integer" editable="no" required="yes" ></o-integer-input>
       
@@ -69,7 +69,7 @@
         edition-mode="dblclick" 
         horizontal-scroll="yes" class="fill-form">
         
-          <o-date-input #ShippedDate attr="ShippedDate" type="timestamp" label="Shippeddate " editable="no" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+          <o-table-column #ShippedDate attr="ShippedDate" title="Shippeddate " type="VARCHAR(8000)" editable="no" required="no" ></o-table-column>
         
           <o-table-column attr="OrderId" title="Order">
     <o-table-cell-renderer-service attr="OrderId" 
@@ -95,7 +95,7 @@
         
           <o-table-column #Discount attr="Discount" title="Discount " editable="no" required="no" content-align="left"></o-table-column>
         
-          <o-table-column #Id attr="Id" title="Id* " type="integer" editable="no" required="no" content-align="center"></o-table-column>
+          <o-table-column #Id attr="Id" title="Id " type="integer" editable="no" required="no" content-align="center"></o-table-column>
         
           <o-table-column #Quantity attr="Quantity" title="Quantity " type="integer" editable="no" required="no" content-align="center"></o-table-column>
         

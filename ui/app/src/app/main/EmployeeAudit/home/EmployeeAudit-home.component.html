@@ -1,14 +1,14 @@
-<o-form-layout-manager attr="EmployeeAudit" mode="tab" title="{{ 'EMPLOYEEAUDIT'}}">
+<o-form-layout-manager attr="EmployeeAudit" mode="tab" title="EMPLOYEEAUDIT">
     <div fxFill fxLayout="column" fxLayoutAlign="start">
         <o-table 
             attr="EmployeeAuditTable" 
             service="EmployeeAudit" 
             entity="EmployeeAudit" 
-            title="{{ 'EMPLOYEEAUDIT'}}"
+            title="EMPLOYEEAUDIT"
             keys="Id"
-            columns="LastName;EmployeeId;Title;Salary;FirstName;CreatedOn;CreatedBy;UpdatedOn;UpdatedBy;Id" 
+            columns="UpdatedOn;LastName;FirstName;UpdatedBy;Salary;EmployeeId;CreatedOn;Id;Title;CreatedBy" 
             header-actions="R;D"
-            visible-columns="LastName;EmployeeId;Title;Salary;FirstName;CreatedOn;CreatedBy;UpdatedOn;UpdatedBy;Id"  
+            visible-columns="UpdatedOn;LastName;FirstName;UpdatedBy;Salary;EmployeeId;CreatedOn;Id;Title;CreatedBy"  
             sort-columns="LastName" 
             query-rows="20" 
             quick-filter="yes"
@@ -22,7 +22,15 @@
             show-title="yes"
             export-button="yes">
             
-            <o-table-column #LastName attr="LastName" title=" Last Name*" editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #UpdatedOn attr="UpdatedOn" title="Updatedon " editable="no" required="no" content-align="left"></o-table-column>
+            
+            <o-table-column #LastName attr="LastName" title="Last Name " editable="no" required="no" content-align="left"></o-table-column>
+            
+            <o-table-column #FirstName attr="FirstName" title="Firstname " editable="no" required="no" content-align="left"></o-table-column>
+            
+            <o-table-column #UpdatedBy attr="UpdatedBy" title="Updatedby " editable="no" required="no" content-align="left"></o-table-column>
+            
+            <o-table-column #Salary attr="Salary" title="Salary " type="currency" editable="no" required="no" currency-symbol="$" currency-symbol-position="left" thousand-separator=","decimal-separator="."></o-table-column>
             
             <o-table-column attr="EmployeeId" title="Employee">
     <o-table-cell-renderer-service attr="EmployeeId" 
@@ -33,21 +41,13 @@
     </o-table-cell-renderer-service>
 </o-table-column>
             
-            <o-table-column #Title attr="Title" title="Title" editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #CreatedOn attr="CreatedOn" title="Createdon " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-table-column #Salary attr="Salary" title="Salary" type="real" min-decimal-digits="2" max-decimal-digits="4" min="0" max="1000000.0000" content-align="center"></o-table-column>
+            <o-table-column #Id attr="Id" title="Id " type="integer" editable="no" required="no" content-align="center"></o-table-column>
             
-            <o-table-column #FirstName attr="FirstName" title="FirstName" editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #Title attr="Title" title="Title " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-table-column #CreatedOn attr="CreatedOn" title="CreatedOn" editable="no" required="no" content-align="left"></o-table-column>
-            
-            <o-table-column #CreatedBy attr="CreatedBy" title="CreatedBy" editable="no" required="no" content-align="left"></o-table-column>
-            
-            <o-table-column #UpdatedOn attr="UpdatedOn" title="UpdatedOn" editable="no" required="no" content-align="left"></o-table-column>
-            
-            <o-table-column #UpdatedBy attr="UpdatedBy" title="UpdatedBy" editable="no" required="no" content-align="left"></o-table-column>
-            
-            <o-table-column #Id attr="Id" title="Id" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            <o-table-column #CreatedBy attr="CreatedBy" title="Createdby " editable="no" required="no" content-align="left"></o-table-column>
             
             <o-table-context-menu></o-table-context-menu>
             <o-table-paginator page-size-options="24;48;96"></o-table-paginator>

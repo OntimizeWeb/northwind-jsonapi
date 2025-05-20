@@ -22,17 +22,17 @@
             show-title="yes"
             export-button="yes">
             
-            <o-date-input #OrderDate attr="OrderDate" type="date" label="Orderdate " enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            <o-table-column #OrderDate attr="OrderDate" title="Orderdate " type="DATE" editable="no" required="no" ></o-table-column>
             
             <o-table-column #OrderDetailCount attr="OrderDetailCount" title="Orderdetailcount " type="integer" editable="no" required="no" content-align="center"></o-table-column>
             
-            <o-date-input #RequiredDate attr="RequiredDate" type="date" label="Requireddate " enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            <o-table-column #RequiredDate attr="RequiredDate" title="Requireddate " type="DATE" editable="no" required="no" ></o-table-column>
             
             <o-table-column #ShipAddress attr="ShipAddress" title="Shipaddress " editable="no" required="no" content-align="left"></o-table-column>
             
             <o-table-column #ShipCountry attr="ShipCountry" title="Shipcountry " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-date-input #ShippedDate attr="ShippedDate" type="timestamp" label="Shippeddate " editable="no" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            <o-table-column #ShippedDate attr="ShippedDate" title="Shippeddate " type="VARCHAR(8000)" editable="no" required="no" ></o-table-column>
             
             <o-table-column #CloneFromOrder attr="CloneFromOrder" title="Clonefromorder " type="integer" editable="no" required="no" content-align="center"></o-table-column>
             
@@ -51,24 +51,20 @@
     </o-table-cell-renderer-service>
 </o-table-column>
             
-            <o-table-column #Ready attr="Ready" title="Ready " editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column attr="Ready" title="Ready ">
+    <o-table-cell-renderer-boolean render-true-value="check_circle" render-false-value="highlight_off"
+        render-type="icon" boolean-type="boolean" true-value="true" false-value="false"></o-table-cell-renderer-boolean>
+</o-table-column>
             
             <o-table-column #Country attr="Country" title="Country " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-table-column #ShipName attr="ShipName" title="Ship Name* " editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #ShipName attr="ShipName" title="Ship Name " editable="no" required="no" content-align="left"></o-table-column>
             
             <o-table-column #ShipRegion attr="ShipRegion" title="Shipregion " editable="no" required="no" content-align="left"></o-table-column>
             
             <o-table-column #Id attr="Id" title="Id " type="integer" editable="no" required="no" content-align="center"></o-table-column>
             
-            <o-table-column attr="CustomerId" title="Customer">
-    <o-table-cell-renderer-service attr="CustomerId" 
-        service="Customer" entity="CustomerType" columns="Id;CompanyName"
-        parent-keys="Id:CustomerId"
-        value-column="CompanyName" keys="CustomerId"
-        visible-columns="CompanyName" separator=" - " width="680px">
-    </o-table-cell-renderer-service>
-</o-table-column>
+            <o-table-column #CustomerId attr="CustomerId" title="Customerid " editable="no" required="yes" content-align="left"></o-table-column>
             
             <o-table-column #ShipCity attr="ShipCity" title="Shipcity " editable="no" required="no" content-align="left"></o-table-column>
             

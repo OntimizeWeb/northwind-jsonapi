@@ -14,7 +14,15 @@
   <o-row attr="row1" layout-align="start stretch">
     <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
       
-      <o-text-input #LastName attr="LastName" label=" Last Name*" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      <o-text-input #UpdatedOn attr="UpdatedOn" label="Updatedon " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-text-input #LastName attr="LastName" label="Last Name " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-text-input #FirstName attr="FirstName" label="Firstname " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-text-input #UpdatedBy attr="UpdatedBy" label="Updatedby " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-currency-input #Salary attr="Salary" title="Salary " type="currency" editable="no" required="no" currency-symbol="$" currency-symbol-position="left" thousand-separator="," decimal-separator="."></o-currency-input>
       
       <o-list-picker 
         attr="EmployeeId"
@@ -35,21 +43,13 @@
         separator=" - " width="680px" class="form-field">
 </o-list-picker>
       
-      <o-text-input #Title attr="Title" label="Title" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      <o-text-input #CreatedOn attr="CreatedOn" label="Createdon " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-      <o-real-input #Salary attr="Salary" label="Salary" min-decimal-digits="2" max-decimal-digits="4" min="0" max="1000000000" fxFlex="20%" class="form-field"></o-real-input>
+      <o-integer-input #Id attr="Id" label="Id " type="integer" editable="no" required="no" ></o-integer-input>
       
-      <o-text-input #FirstName attr="FirstName" label="FirstName" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      <o-text-input #Title attr="Title" label="Title " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
-      <o-text-input #CreatedOn attr="CreatedOn" label="CreatedOn" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
-      
-      <o-text-input #CreatedBy attr="CreatedBy" label="CreatedBy" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
-      
-      <o-text-input #UpdatedOn attr="UpdatedOn" label="UpdatedOn" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
-      
-      <o-text-input #UpdatedBy attr="UpdatedBy" label="UpdatedBy" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
-      
-      <o-integer-input #Id attr="Id" label="Id" type="integer" editable="no" required="no" ></o-integer-input>
+      <o-text-input #CreatedBy attr="CreatedBy" label="Createdby " enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
       
     </div>
   </o-row>

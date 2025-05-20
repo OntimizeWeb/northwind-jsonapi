@@ -1,10 +1,10 @@
-<o-form-layout-manager attr="EmployeeTerritory" mode="dialog" title="{{ 'EMPLOYEETERRITORY'}}">
+<o-form-layout-manager attr="EmployeeTerritory" mode="dialog" title="EMPLOYEETERRITORY">
     <div fxFill fxLayout="column" fxLayoutAlign="start">
         <o-table 
             attr="EmployeeTerritoryTable" 
             service="EmployeeTerritory" 
             entity="EmployeeTerritory" 
-            title="{{ 'EMPLOYEETERRITORY'}}"
+            title="EMPLOYEETERRITORY"
             keys="Id"
             columns="Id;TerritoryId;EmployeeId" 
             header-actions="R;D"
@@ -22,16 +22,9 @@
             show-title="yes"
             export-button="yes">
             
-            <o-table-column #Id attr="Id" title=" Id*" editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #Id attr="Id" title="Id " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-table-column attr="TerritoryId" title="Territory">
-    <o-table-cell-renderer-service attr="TerritoryId" 
-        service="Territory" entity="TerritoryType" columns="Id;TerritoryDescription"
-        parent-keys="Id:TerritoryId"
-        value-column="TerritoryDescription" keys="TerritoryId"
-        visible-columns="TerritoryDescription" separator=" - " width="680px">
-    </o-table-cell-renderer-service>
-</o-table-column>
+            <o-table-column #TerritoryId attr="TerritoryId" title="Territoryid " editable="no" required="no" content-align="left"></o-table-column>
             
             <o-table-column attr="EmployeeId" title="Employee">
     <o-table-cell-renderer-service attr="EmployeeId" 

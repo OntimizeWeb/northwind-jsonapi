@@ -1,10 +1,10 @@
-<o-form-layout-manager attr="Shipper" mode="tab" title="{{ 'SHIPPER'}}">
+<o-form-layout-manager attr="Shipper" mode="dialog" title="SHIPPER">
     <div fxFill fxLayout="column" fxLayoutAlign="start">
         <o-table 
             attr="ShipperTable" 
             service="Shipper" 
             entity="Shipper" 
-            title="{{ 'SHIPPER'}}"
+            title="SHIPPER"
             keys="Id"
             columns="CompanyName;Phone;Id" 
             header-actions="R;D"
@@ -22,11 +22,11 @@
             show-title="yes"
             export-button="yes">
             
-            <o-table-column #CompanyName attr="CompanyName" title=" Company Name*" editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #CompanyName attr="CompanyName" title="Company Name " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-table-column #Phone attr="Phone" title="Phone" editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #Phone attr="Phone" title="Phone " editable="no" required="no" content-align="left"></o-table-column>
             
-            <o-table-column #Id attr="Id" title="Id" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            <o-table-column #Id attr="Id" title="Id " type="integer" editable="no" required="no" content-align="center"></o-table-column>
             
             <o-table-context-menu></o-table-context-menu>
             <o-table-paginator page-size-options="24;48;96"></o-table-paginator>

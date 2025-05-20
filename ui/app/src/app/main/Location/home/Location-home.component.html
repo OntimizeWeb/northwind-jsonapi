@@ -1,10 +1,10 @@
-<o-form-layout-manager attr="Location" mode="tab" title="{{ 'LOCATION'}}">
+<o-form-layout-manager attr="Location" mode="tab" title="LOCATION">
     <div fxFill fxLayout="column" fxLayoutAlign="start">
         <o-table 
             attr="LocationTable" 
             service="Location" 
             entity="Location" 
-            title="{{ 'LOCATION'}}"
+            title="LOCATION"
             keys="country;city"
             columns="country;city;notes" 
             header-actions="R;D"
@@ -22,11 +22,11 @@
             show-title="yes"
             export-button="yes">
             
-            <o-table-column #country attr="country" title=" country*" editable="no" required="yes" content-align="left"></o-table-column>
+            <o-table-column #country attr="country" title="Country " editable="no" required="yes" content-align="left"></o-table-column>
             
-            <o-table-column #city attr="city" title="city" editable="no" required="yes" content-align="left"></o-table-column>
+            <o-table-column #city attr="city" title="City " editable="no" required="yes" content-align="left"></o-table-column>
             
-            <o-table-column #notes attr="notes" title="notes" editable="no" required="no" content-align="left"></o-table-column>
+            <o-table-column #notes attr="notes" title="Notes " editable="no" required="no" content-align="left"></o-table-column>
             
             <o-table-context-menu></o-table-context-menu>
             <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
