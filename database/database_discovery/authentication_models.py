@@ -22,7 +22,6 @@ from flask_jwt_extended import create_access_token
 ########################################################################################################################
  
 from database.system.SAFRSBaseX import SAFRSBaseX
-from flask_login import UserMixin
 import safrs, flask_sqlalchemy
 from safrs import jsonapi_attr
 from flask_sqlalchemy import SQLAlchemy
@@ -42,7 +41,7 @@ from sqlalchemy.dialects.sqlite import *
 
 
 
-class Role(SAFRSBaseX, Baseauthentication, db.Model, UserMixin):  # type: ignore
+class Role(SAFRSBaseX, Baseauthentication, db.Model):  # type: ignore
     __tablename__ = 'Role'
     _s_collection_name = 'authentication-Role'  # type: ignore
     __bind_key__ = 'authentication'
@@ -68,7 +67,7 @@ class Role(SAFRSBaseX, Baseauthentication, db.Model, UserMixin):  # type: ignore
     S_CheckSum = _check_sum_
 
 
-class User(SAFRSBaseX, Baseauthentication, db.Model, UserMixin):  # type: ignore
+class User(SAFRSBaseX, Baseauthentication, db.Model):  # type: ignore
     __tablename__ = 'User'
     _s_collection_name = 'authentication-User'  # type: ignore
     __bind_key__ = 'authentication'
@@ -126,7 +125,7 @@ class User(SAFRSBaseX, Baseauthentication, db.Model, UserMixin):  # type: ignore
     S_CheckSum = _check_sum_
 
 
-class Api(SAFRSBaseX, Baseauthentication, db.Model, UserMixin):  # type: ignore
+class Api(SAFRSBaseX, Baseauthentication, db.Model):  # type: ignore
     __tablename__ = 'Apis'
     _s_collection_name = 'authentication-Api'  # type: ignore
     __bind_key__ = 'authentication'
@@ -154,7 +153,7 @@ class Api(SAFRSBaseX, Baseauthentication, db.Model, UserMixin):  # type: ignore
     S_CheckSum = _check_sum_
 
 
-class UserRole(SAFRSBaseX, Baseauthentication, db.Model, UserMixin):  # type: ignore
+class UserRole(SAFRSBaseX, Baseauthentication, db.Model):  # type: ignore
     __tablename__ = 'UserRole'
     _s_collection_name = 'authentication-UserRole'  # type: ignore
     __bind_key__ = 'authentication'

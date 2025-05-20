@@ -18,7 +18,6 @@ from sqlalchemy.ext.declarative import declarative_base
 ########################################################################################################################
 
 from database.system.SAFRSBaseX import SAFRSBaseX
-from flask_login import UserMixin
 import safrs, flask_sqlalchemy
 from safrs import jsonapi_attr
 from flask_sqlalchemy import SQLAlchemy
