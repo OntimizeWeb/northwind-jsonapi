@@ -14,7 +14,7 @@ const routes: Routes = [
       }
     }
   },{
-    path: ':Country/Order', loadChildren: () => import('../Order/Order.module').then(m => m.OrderModule),
+    path: ':country/:city/Order', loadChildren: () => import('../Order/Order.module').then(m => m.OrderModule),
     data: {
         oPermission: {
             permissionId: 'Order-detail-permissions'
@@ -26,7 +26,7 @@ const routes: Routes = [
 export const LOCATION_MODULE_DECLARATIONS = [
     LocationHomeComponent,
     LocationNewComponent,
-    LocationDetailComponent 
+    LocationDetailComponent
 ];
 
 
